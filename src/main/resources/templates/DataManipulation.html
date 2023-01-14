@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Data</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body  style="margin: 0 2% 2%;">
+<h2 style="text-align:center; background-color: #b6d9d8; padding: 30px 0 30px 30px">My project Page</h2>
+<h3 style="text-align: left">Data manipulation</h3>
+
+<div style="background-color: #f7e2c1; width: 50%; padding: 10px">
+    <h4 style="text-align: left">Generate some data</h4>
+<div>
+    <form method="post" action="/file_upload/generate" enctype="multipart/form-data">
+        <label>Choose data to generate</label>
+        <p></p>
+        <select name="datatable" id="datatable"  required>
+            <option value = "0" disabled>--Select--</option>
+            <option value="customers">Customers</option>
+            <option value="mcc_codes">Codes</option>
+            <option value="tran_types">Transaction types</option>
+            <option value="transactions">Transactions</option>
+        </select> <br>
+        Generated file name: <input size="30" id="fn" name="fn"> <br>
+        <p></p>
+        Number of rows to generate: <input type="text" size="4" value="100" id="rs" name="rs" required>
+        <br>
+        <p></p>
+        <button type="submit" id="genb">Generate</button> <br>
+        {{#Generated}}
+        <div style="margin: 2% 60% 2% 2%;background-color: lightgray">{{Message}}</div>
+        {{/Generated}}
+    </form>
+</div>
+<p></p>
+<p></p>
+<h4 style="text-align: left">Update database from files</h4>
+<div>
+    <form method="post" action="/file_upload/upload" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".txt, .csv" required/>
+        <br><br>
+        <label for="table">Choose table to update   </label>
+        <select name="table" id="table" required>
+            <option value = "0" disabled>--Select--</option>
+            <option value="customer_gender">Customers</option>
+            <option value="transactions">Transactions</option>
+            <option value="tran_mcc_codes">MCC Codes</option>
+            <option value="tran_types">Transaction Types</option>
+        </select>
+        <p></p>
+
+        <button type="submit"> Submit </button><br>
+        {{#Inserted}}
+        <div style="margin: 2% 60% 2% 2%;background-color: lightgray">{{Message2}}</div>
+        {{/Inserted}}
+    </form>
+</div>
+</div>
+<p></p>
+<p></p>
+<p></p>
+<div>
+    <form method="get" action=http://localhost:8080/home/>
+        <button type="submit" style="padding: 25px">Home Page</button>
+    </form>
+</div>
+</body>
+</html>
