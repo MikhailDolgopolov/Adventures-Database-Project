@@ -1,7 +1,5 @@
 package com.mikhaildolgopolov.spring.database;
 
-import com.mikhaildolgopolov.spring.models.DeviationGroup;
-
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -90,23 +88,5 @@ public class DatabaseService {
         InsertData(address(table), headers, data);
     }
 
-    public List<DeviationGroup> getDispersion(int n) throws SQLException {
-        List<DeviationGroup> response = new ArrayList<>();
-        connection.setAutoCommit(false);
-        String query = "SELECT mcc_code_tr_type as grouping, pow(var_samp(amount), 0.5) as st_deviation\n" +
-                "FROM curs.information_schema.transactions\n" +
-                "WHERE amount<0\n" +
-                "GROUP BY mcc_code_tr_type\n" +
-                "HAVING COUNT(mcc_code_tr_type)>" + n +
-                "ORDER BY st_deviation DESC";
-        PreparedStatement statement = connection.prepareStatement(query);
-        ResultSet resultSet = statement.executeQuery();
-        while (resultSet.next()) {
-            int g = resultSet.getInt("grouping");
-            double sd = resultSet.getDouble("st_deviation");
-            response.add(new DeviationGroup(g, sd));
-        }
 
-        return response;
-    }
 }

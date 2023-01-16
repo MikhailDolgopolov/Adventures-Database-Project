@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @Controller
-@RequestMapping(path = "/home")
+@RequestMapping(path = "/home/")
 public class MainController {
 
     @GetMapping("/")

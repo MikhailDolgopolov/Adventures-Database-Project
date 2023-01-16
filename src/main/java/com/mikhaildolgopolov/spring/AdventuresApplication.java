@@ -5,13 +5,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class KursachApplication extends SpringBootServletInitializer {
+public class AdventuresApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(KursachApplication.class, args);
-	}
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(KursachApplication.class);
+		SpringApplication.run(AdventuresApplication.class, args);
 	}
 
 }
