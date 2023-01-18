@@ -1,4 +1,4 @@
-package com.mikhaildolgopolov.spring.models;
+package com.mikhaildolgopolov.spring.database.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

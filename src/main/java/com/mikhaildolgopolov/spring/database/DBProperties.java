@@ -1,21 +1,27 @@
 package com.mikhaildolgopolov.spring.database;
 
 import com.mikhaildolgopolov.spring.ApplicationProperties;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 import java.util.Properties;
 
+@Component
 public class DBProperties {
     private static final String DRIVER = "spring.datasource.driver-class-name";
     private static final String URL = "spring.datasource.url";
     private static final String USER = "spring.datasource.username";
     private static final String PASSWORD = "spring.datasource.password";
 
-    private static DBProperties INSTANCE;
 
+    @Value("${"+DRIVER+"}")
     private String driver;
+    @Value("${"+URL+"}")
     private String url;
+    @Value("${"+USER+"}")
     private String user;
+    @Value("${"+PASSWORD+"}")
     private String password;
 
     public String getDriver() {return driver;}
@@ -31,22 +37,5 @@ public class DBProperties {
         return password;
     }
 
-    private DBProperties() {}
 
-    private void init(Properties properties) {
-        driver = properties.getProperty(DRIVER);
-        url = properties.getProperty(URL);
-        user = properties.getProperty(USER);
-        password = properties.getProperty(PASSWORD);
-    }
-
-
-
-    public static DBProperties getProperties() {
-        if(Objects.isNull(INSTANCE)) {
-            INSTANCE = new DBProperties();
-            INSTANCE.init(ApplicationProperties.getInstance().getProperties());
-        }
-        return INSTANCE;
-    }
 }

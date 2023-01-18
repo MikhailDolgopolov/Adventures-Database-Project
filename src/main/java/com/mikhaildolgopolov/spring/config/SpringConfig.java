@@ -1,9 +1,7 @@
 package com.mikhaildolgopolov.spring.config;
 
 import com.mikhaildolgopolov.spring.database.DBProperties;
-import com.mikhaildolgopolov.spring.database.DatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.view.MustacheViewResolver;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +14,6 @@ import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
-import java.sql.DriverManager;
 
 @Configuration
 @ComponentScan("com.mikhaildolgopolov.spring")
@@ -32,16 +29,16 @@ public class SpringConfig implements WebMvcConfigurer {
         MustacheViewResolver resolver = new MustacheViewResolver();
         resolver.setCharset("UTF8");
         registry.viewResolver(resolver);
-        new DatabaseService().init();
     }
 
     @Bean
     public DataSource dataSource(){
         var dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(DBProperties.getProperties().getDriver());
-        dataSource.setUrl(DBProperties.getProperties().getUrl());
-        dataSource.setUsername(DBProperties.getProperties().getUser());
-        dataSource.setPassword(DBProperties.getProperties().getPassword());
+        DBProperties properties = applicationContext.getBean(DBProperties.class);
+        dataSource.setDriverClassName(properties.getDriver());
+        dataSource.setUrl(properties.getUrl());
+        dataSource.setUsername(properties.getUser());
+        dataSource.setPassword(properties.getPassword());
 
         return dataSource;
     }

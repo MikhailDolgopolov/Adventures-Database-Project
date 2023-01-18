@@ -1,4 +1,4 @@
-package com.mikhaildolgopolov.spring.models;
+package com.mikhaildolgopolov.spring.database.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -7,21 +7,24 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(schema = "main", name = "hotels")
-public class Hotel {
+@Table(schema = "main", name = "sights")
+public class Sight {
     @Id
     @Getter @Setter
-    private int hotel_id;
+    private int sight_id;
 
     @Getter @Setter
     private String name;
 
     @Getter @Setter
-    private String address;
+    private String city;
 
     @Getter @Setter
-    private int stars;
+    private String type;
 
     @Getter @Setter
-    private String link;
+    private int created_year;
+
+    @Getter @Setter
+    private String description;
 }

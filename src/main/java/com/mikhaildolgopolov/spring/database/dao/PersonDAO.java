@@ -1,7 +1,7 @@
-package com.mikhaildolgopolov.spring.dao;
+package com.mikhaildolgopolov.spring.database.dao;
 
-import com.mikhaildolgopolov.spring.models.Person;
-import com.mikhaildolgopolov.spring.models.mappers.PersonMapper;
+import com.mikhaildolgopolov.spring.database.entities.Person;
+import com.mikhaildolgopolov.spring.database.entities.mappers.PersonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;

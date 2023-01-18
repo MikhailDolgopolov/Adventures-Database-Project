@@ -1,6 +1,6 @@
-package com.mikhaildolgopolov.spring.models.mappers;
+package com.mikhaildolgopolov.spring.database.entities.mappers;
 
-import com.mikhaildolgopolov.spring.models.Person;
+import com.mikhaildolgopolov.spring.database.entities.Person;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

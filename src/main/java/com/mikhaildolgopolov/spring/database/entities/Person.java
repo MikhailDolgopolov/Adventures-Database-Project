@@ -1,12 +1,9 @@
-package com.mikhaildolgopolov.spring.models;
+package com.mikhaildolgopolov.spring.database.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.jdbc.core.RowMapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Date;
 
 @Entity
