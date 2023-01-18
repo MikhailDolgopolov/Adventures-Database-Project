@@ -7,21 +7,7 @@
 <body  style="margin: 0 2% 2%;">
 <h2 style="text-align:center; background-color: #b6d9d8; padding: 30px 0 30px 30px">My project Page</h2>
 <h3>Data Analysis</h3>
-<style>
-    * {
-        box-sizing: border-box;
-    }
-    .column {
-        float: left;
-        width: 50%;
-        padding: 10px;
-    }
-    .row:after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-</style>
+
 <div style="background-color: #f7e2c1; width: 50%; padding: 10px" class="row">
 
 <h4 style="text-align: left">Dispersion Values</h4>
@@ -31,21 +17,20 @@
 <div class="column">
     <table style="width:20%; margin:1%; border: black solid 1px">
         <tr style="background-color: white; border: black solid 1px">
-            <th style="width:25%; border: black solid 1px">MCC-Code+Transaction type</th>
-            <th  style="border: black solid 1px">Standard Deviation</th>
+            <th style="width:25%; border: black solid 1px">Number</th>
+            <th  style="border: black solid 1px">Text</th>
+            <th> Buttons </th>
         </tr>
-            Data
+
         </tr>
     </table>
 </div>
     <div class="column">
         <form method="post" action="/stats/number/" style="margin-bottom: 10px; margin-top: 30px">
             Number of transactions in a group for it to be visible: <br>
-            <input name="in" size="4" style="margin-top: 10px" value={{num}}>
+            <input name="in" size="4" style="margin-top: 10px">
         </form>
-        {{#Error}}
-        <div style="margin: 2% 10% 2% 2%;background-color: lightgray">{{Message}}</div>
-        {{/Error}}<br>
+
         (Press [Enter])
 
     </div>
