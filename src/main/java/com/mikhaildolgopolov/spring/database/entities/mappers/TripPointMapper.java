@@ -1,0 +1,19 @@
+package com.mikhaildolgopolov.spring.database.entities.mappers;
+
+import com.mikhaildolgopolov.spring.database.entities.TripPoint;
+import org.springframework.jdbc.core.RowMapper;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class TripPointMapper implements RowMapper<TripPoint> {
+    @Override
+    public TripPoint mapRow(ResultSet rs, int rowNum) throws SQLException {
+        var tripPoint = new TripPoint();
+        tripPoint.setTrip_point_id(rs.getInt("trip_point_id"));
+        tripPoint.setTitle(rs.getString("title"));
+        tripPoint.setHotel_id(rs.getInt("hotel_id"));
+        tripPoint.setCity(rs.getString("city"));
+        return tripPoint;
+    }
+}

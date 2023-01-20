@@ -27,7 +27,7 @@ public class SpringConfig implements WebMvcConfigurer {
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry){
         MustacheViewResolver resolver = new MustacheViewResolver();
-        resolver.setCharset("UTF8");
+        resolver.setCharset("UTF-8");
         registry.viewResolver(resolver);
     }
 

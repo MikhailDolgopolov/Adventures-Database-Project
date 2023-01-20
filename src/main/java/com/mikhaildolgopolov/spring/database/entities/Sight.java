@@ -27,4 +27,7 @@ public class Sight {
 
     @Getter @Setter
     private String description;
+
+    @Getter @Setter
+    private String image_link;
 }

@@ -1,5 +1,6 @@
 package com.mikhaildolgopolov.spring.database.entities;
 
+import com.mikhaildolgopolov.spring.Transliteration;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,4 +27,20 @@ public class Trip {
 
     @Getter @Setter
     private String description;
+
+    @Getter @Setter
+    private String photo_link;
+
+    public String Title(){
+        return Transliteration.transliterate(title);
+    }
+    public String StartDate(){
+        return String.valueOf(start_date);
+    }
+    public String EndDate(){
+        return String.valueOf(start_date);
+    }
+    public String Description(){
+        return Transliteration.transliterate(description);
+    }
 }
