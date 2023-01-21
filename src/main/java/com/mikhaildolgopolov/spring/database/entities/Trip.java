@@ -2,6 +2,7 @@ package com.mikhaildolgopolov.spring.database.entities;
 
 import com.mikhaildolgopolov.spring.Transliteration;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,24 +12,24 @@ import java.util.Date;
 @Table(schema = "main", name = "trips")
 public class Trip {
     @Id
-    @Getter @Setter
+    @Getter(AccessLevel.PUBLIC) @Setter
     private int trip_id;
 
-    @Getter @Setter
+    @Getter(AccessLevel.PUBLIC) @Setter
     private String title;
 
     @Temporal(TemporalType.DATE)
-    @Getter @Setter
+    @Getter(AccessLevel.PUBLIC) @Setter
     private Date start_date;
 
     @Temporal(TemporalType.DATE)
-    @Getter @Setter
+    @Getter(AccessLevel.PUBLIC) @Setter
     private Date end_date;
 
-    @Getter @Setter
+    @Getter(AccessLevel.PUBLIC) @Setter
     private String description;
 
-    @Getter @Setter
+    @Getter(AccessLevel.PUBLIC) @Setter
     private String photo_link;
 
     public String Title(){

@@ -1,44 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <base href="/">
     <meta charset="UTF-8">
-    <title>Trips</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Trips</title>
+    <link href= /css/my_style.css rel="stylesheet">
+    <script type="text/javascript" href="js/actions.js"></script>
 </head>
 <body  style="margin: 0 2% 2%;">
 <h2 style="text-align:center; background-color: #b6d9d8; padding: 30px 0 30px 30px">My project Page</h2>
 
 <p></p>
-<p></p>
-<table style="border: black solid 1px">
-        <tr style="margin:1%; background-color: white; border: black solid 1px">
-            <th style="border: black solid 1px">Title</th>
-            <th  style="border: black solid 1px">Start Date</th>
-            <th  style="border: black solid 1px">End Date</th>
-            <th  style="border: black solid 1px">Description</th>
+<table>
+        <tr>
+            <th>Title</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Description</th>
         </tr>
         {{#trips}}
         <tr>
-            <td style="border: black solid 1px">
+            <td>
                 <form method="post" action="localhost:8080/trip/">
                     <input id = {{getTrip_id}} hidden>
                     <button type="submit">
-                    {{Title}}
+                    {{getTitle}}
                     </button>
                 </form>
             </td>
-            <td style="border: black solid 1px">{{StartDate}}</td>
-            <td style="border: black solid 1px">{{EndDate}}</td>
-            <td style="border: black solid 1px">{{Description}}</td>
+            <td>{{StartDate}}</td>
+            <td>{{EndDate}}</td>
+            <td>{{Description}}</td>
 
             {{/trips}}
         </tr>
     </table>
 
-<p>
-    0
-    1
-</p>
-<form method="get" action="http://localhost:8080/trips/test/">
+<form method="get" action="trips/test/">
     <button type="submit">Go to test</button>
 </form>
 </body>

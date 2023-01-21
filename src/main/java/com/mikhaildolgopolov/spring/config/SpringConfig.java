@@ -9,7 +9,18 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -18,7 +29,20 @@ import javax.sql.DataSource;
 @Configuration
 @ComponentScan("com.mikhaildolgopolov.spring")
 @EnableWebMvc
+@EnableWebSecurity
 public class SpringConfig implements WebMvcConfigurer {
+    private static final String[] PUBLIC_MATCHERS = {
+            "/css/**",
+            "/js/**",
+            "/webjars/**",
+            "/static/**",
+            "/resources/",
+            "/", "/trips",
+            "/trip"
+    };
+    private static final String[] RESOURCE_LOCATIONS = {
+            "classpath:/META-INF/resources/", "classpath:/resources/",
+            "classpath:/static/", "classpath:/resources/static/" };
     private final ApplicationContext applicationContext;
 
     @Autowired
@@ -27,8 +51,15 @@ public class SpringConfig implements WebMvcConfigurer {
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry){
         MustacheViewResolver resolver = new MustacheViewResolver();
-        resolver.setCharset("UTF-8");
         registry.viewResolver(resolver);
+    }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        if (!registry.hasMappingForPattern("/**")) {
+            registry.addResourceHandler("/**").addResourceLocations(
+                    RESOURCE_LOCATIONS);
+        }
+
     }
 
     @Bean
@@ -46,5 +77,30 @@ public class SpringConfig implements WebMvcConfigurer {
     @Bean
     public JdbcTemplate jdbcTemplate(){
         return new JdbcTemplate(dataSource());
+    }
+
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails user =
+                User.withDefaultPasswordEncoder()
+                        .username("user")
+                        .password("password")
+                        .roles("USER", "ADMIN")
+                        .build();
+
+        return new InMemoryUserDetailsManager(user);
+    }
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests().requestMatchers("/**").permitAll(); // config to permit all requests
+        return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager() { // to delete default username and password that is printed in the log every time, you can provide here any auth manager (InMemoryAuthenticationManager, etc) as you need
+        return authentication -> {
+            throw new UnsupportedOperationException();
+        };
     }
 }
