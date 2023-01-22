@@ -23,6 +23,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.templatemode.TemplateMode;
 
 import javax.sql.DataSource;
 
@@ -49,11 +51,6 @@ public class SpringConfig implements WebMvcConfigurer {
     public SpringConfig(ApplicationContext context){applicationContext=context;}
 
     @Override
-    public void configureViewResolvers(ViewResolverRegistry registry){
-        MustacheViewResolver resolver = new MustacheViewResolver();
-        registry.viewResolver(resolver);
-    }
-    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         if (!registry.hasMappingForPattern("/**")) {
             registry.addResourceHandler("/**").addResourceLocations(
@@ -61,6 +58,7 @@ public class SpringConfig implements WebMvcConfigurer {
         }
 
     }
+
 
     @Bean
     public DataSource dataSource(){
@@ -73,7 +71,6 @@ public class SpringConfig implements WebMvcConfigurer {
 
         return dataSource;
     }
-
     @Bean
     public JdbcTemplate jdbcTemplate(){
         return new JdbcTemplate(dataSource());
