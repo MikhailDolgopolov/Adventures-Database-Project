@@ -12,16 +12,10 @@ import org.springframework.web.bind.annotation.*;
 public class TripController {
     @Autowired
     private TripDAO tripDAO;
-    @PostMapping("/{id}")
-    @ModelAttribute("Title")
-    public String postTrip(@RequestParam("id") int id, Model model){
-       return "redirect://trip/"+id;
-    }
     @GetMapping("/{id}")
     public String getTrip(@PathVariable int id, Model model){
         Trip trip = tripDAO.findById(id);
-        model.addAttribute("Title", trip.Title());
-        model.addAttribute("Trip", trip);
+        model.addAttribute("trip", trip);
         return "SingleTrip";
     }
 

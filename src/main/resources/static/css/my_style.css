@@ -8,11 +8,11 @@ h2{
     grid-template-columns: repeat(5, 1fr);
     grid-auto-rows: minmax(250px, auto);
 }
-.rowButton{
+.trip-block{
     padding: 2em 1em;
     margin: 1em;
     border: gray solid 1px;
 }
-.rowButton:hover, :focus{
+.trip-block:hover, :focus{
     background-color: lightblue;
 }

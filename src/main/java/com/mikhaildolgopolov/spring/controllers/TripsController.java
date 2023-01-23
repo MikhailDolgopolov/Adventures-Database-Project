@@ -16,10 +16,14 @@ public class TripsController {
         model.addAttribute("trips", tripDAO.findAll());
         return "AllTrips";
     }
-    @GetMapping("/test/")
-    public String test(Model model){
-        model.addAttribute("trips", tripDAO.findAll());
-        return "TableTest";
+    @PostMapping("/post/")
+    public String test(@RequestParam String number, Model model){
+        return "redirect://localhost:8080/trip/"+number;
+    }
+    @GetMapping("/get/{number}")
+    public String getTrip(@PathVariable String number){
+        System.out.println("number");
+        return "AllTrips";
     }
 
 }

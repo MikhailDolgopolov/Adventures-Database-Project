@@ -1,6 +1,8 @@
-function showAlert() {
-    alert("The button was clicked! ");
+function submit(id) {
+    document.getElementById(id).submit();
+    alert(id);
 }
-function rowClicked(row){
-    alert(`Row ${row} was clicked`)
+function click(row){
+    alert(row);
+    console.log(row);
 }

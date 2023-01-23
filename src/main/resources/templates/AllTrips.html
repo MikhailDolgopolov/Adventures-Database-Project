@@ -6,20 +6,41 @@
     <title>Trips</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/my_style.css}"/>
     <script type="text/javascript" th:href="@{js/actions.js}"></script>
+    <script type="text/javascript">
+        $(document).fun(function(num){
+            alert("ready!");
+            console.log("ready")
+        });
+    </script>
+
 </head>
 <body>
 <h2 style="">My project Page</h2>
 
-<div class="grid"  >
-    <div class="rowButton" th:each = "trip : ${trips}">
-    <span th:text="${trip.getTitle}"> Title </span>
-    <span th:text="${trip.getStart_date}"> StartDate </span>
-    <span th:text="${trip.getEnd_date}"> EndDate</span>
-    <span th:text="${trip.getDescription}"> Description </span>
-    </div>
+<div class="grid" >
+    <script>
+        function date(id){
+            document.getElementById(id).submit();
+            //alert(id);
+        }
+
+    </script>
+    <form method="post"  th:each = "trip : ${trips}"
+          th:action="@{trips/post/}" action="#" th:id="${trip.getTrip_id}">
+        <!--alert('[[${trip.getTrip_id}]]')-->
+        <div class = "trip-block" onclick="date()" th:onclick="date(1)">
+            <input type="submit" name="number" th:value="${trip.getTrip_id}">
+            <span th:text="${trip.getTitle}"> Title </span>
+            <span th:text="${trip.getStart_date}"> StartDate </span>
+            <span th:text="${trip.getEnd_date}"> EndDate</span>
+            <span th:text="${trip.getDescription}"> Description </span>
+        </div>
+    </form>
 </div>
-<form method="get" action="trips/test/">
-    <button type="submit">Go to test</button>
+<form method="post" th:action="@{trips/post/}" action="#">
+    <input name="number" th:value="3">
+    <button type="submit">Click</button>
 </form>
+
 </body>
 </html>
