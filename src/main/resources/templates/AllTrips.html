@@ -25,16 +25,16 @@
         }
 
     </script>
-    <form method="post"  th:each = "trip : ${trips}"
+    <form class = "trip-block" method="post"  th:each = "trip : ${trips}"
           th:action="@{trips/post/}" action="#" th:id="${trip.getTrip_id}">
-        <!--alert('[[${trip.getTrip_id}]]')-->
-        <div class = "trip-block" onclick="date()" th:onclick="date(1)">
-            <input type="submit" name="number" th:value="${trip.getTrip_id}">
-            <span th:text="${trip.getTitle}"> Title </span>
+        <input name="number" th:value="${trip.getTrip_id}" hidden>
+        <button class = "trip-button">
+            <h3 th:text="${trip.getTitle}"> Title </h3>
             <span th:text="${trip.getStart_date}"> StartDate </span>
+               <span> - </span>
             <span th:text="${trip.getEnd_date}"> EndDate</span>
-            <span th:text="${trip.getDescription}"> Description </span>
-        </div>
+            <p th:text="${trip.getDescription}"> Description </p>
+        </button>
     </form>
 </div>
 <form method="post" th:action="@{trips/post/}" action="#">

@@ -9,10 +9,16 @@ h2{
     grid-auto-rows: minmax(250px, auto);
 }
 .trip-block{
-    padding: 2em 1em;
+    width: available;
     margin: 1em;
-    border: gray solid 1px;
 }
-.trip-block:hover, :focus{
+.trip-button:hover, :focus{
     background-color: lightblue;
+    border: none;
+
+}
+.trip-button{
+    width: 100%;
+    height: 100%;
+    margin: 0;
 }
