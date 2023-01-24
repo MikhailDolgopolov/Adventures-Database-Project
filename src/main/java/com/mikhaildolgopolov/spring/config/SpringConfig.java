@@ -41,8 +41,8 @@ public class SpringConfig implements WebMvcConfigurer {
             "/webjars/**",
             "/static/**",
             "/resources/",
-            "/**", "/trips/**",
-            "/trip/**"
+            "/**", "/trips/**","/trips/add/",
+            "/trip/**",
     };
     private static final String[] RESOURCE_LOCATIONS = {
             "classpath:/META-INF/resources/", "classpath:/resources/",

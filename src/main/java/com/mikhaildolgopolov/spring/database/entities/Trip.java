@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -18,11 +19,12 @@ public class Trip {
     @Getter(AccessLevel.PUBLIC) @Setter
     private String title;
 
-    @Temporal(TemporalType.DATE)
+
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     @Getter(AccessLevel.PUBLIC) @Setter
     private Date start_date;
 
-    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     @Getter(AccessLevel.PUBLIC) @Setter
     private Date end_date;
 
@@ -32,9 +34,7 @@ public class Trip {
     @Getter(AccessLevel.PUBLIC) @Setter
     private String photo_link;
 
-    public String Title(){
-        return Transliteration.transliterate(title);
-    }
+
     public String StartDate(){
         return String.valueOf(start_date);
     }
@@ -42,6 +42,12 @@ public class Trip {
         return String.valueOf(start_date);
     }
     public String Description(){
-        return Transliteration.transliterate(description);
+        return String.valueOf(description);
     }
+    @Override
+    public String toString(){
+        return title;
+    }
+    public boolean hasD(){return description==null || description.isEmpty();}
+
 }
