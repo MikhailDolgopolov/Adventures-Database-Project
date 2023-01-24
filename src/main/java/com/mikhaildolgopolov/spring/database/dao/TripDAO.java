@@ -22,7 +22,7 @@ public class TripDAO {
     }
 
     public List<Trip> findAll(){
-        return jdbcTemplate.query("SELECT * FROM main.trips", new TripMapper());
+        return jdbcTemplate.query("SELECT * FROM main.trips ORDER BY start_date DESC", new TripMapper());
     }
 
     public Trip findById(int id){
@@ -38,6 +38,7 @@ public class TripDAO {
                 trip.getDescription(), trip.getPhoto_link(), trip.getTrip_id());
     }
     public void save(@NotNull Trip trip){
+        if(trip.getTitle().equals(new Trip().getTitle())) return;
         jdbcTemplate.update("INSERT INTO main.trips" +
                         "(title, start_date, end_date, description, photo_link)" +
                         " VALUES (?, ?, ?, ?, ?)",

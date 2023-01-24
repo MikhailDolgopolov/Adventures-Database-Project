@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Путешествие</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/my_style.css}"/>
+    <script type="text/javascript" th:href="@{js/actions.js}"></script>
+</head>
+<body>
+<h1 th:text="${trip.getTitle}">Title</h1>
+
+<div class="grid" >
+    <form class = "grid-block" method="post" th:each = "point : ${points}"
+          th:action="@{points/post/}" action="#" th:id="${point.getTrip_point_id}">
+        <input name="number" th:value="${point.getTrip_point_id}" hidden>
+        <button class = "grid-button">
+            <h3 th:text="${point.getTitle}"> Title </h3>
+        </button>
+    </form>
+</div>
+
+<form method="get" action="http://localhost:8080/trips/">
+    <button> <h3>Ко всем путешествиям</h3></button>
+</form>
+</body>
+</html>

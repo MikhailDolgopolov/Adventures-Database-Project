@@ -17,12 +17,16 @@ import org.springframework.security.config.annotation.web.configurers.LogoutConf
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.templatemode.TemplateMode;
 
 import javax.sql.DataSource;
 
@@ -37,8 +41,8 @@ public class SpringConfig implements WebMvcConfigurer {
             "/webjars/**",
             "/static/**",
             "/resources/",
-            "/", "/trips",
-            "/trip"
+            "/**", "/trips/**","/trips/add/",
+            "/trip/**",
     };
     private static final String[] RESOURCE_LOCATIONS = {
             "classpath:/META-INF/resources/", "classpath:/resources/",
@@ -49,11 +53,6 @@ public class SpringConfig implements WebMvcConfigurer {
     public SpringConfig(ApplicationContext context){applicationContext=context;}
 
     @Override
-    public void configureViewResolvers(ViewResolverRegistry registry){
-        MustacheViewResolver resolver = new MustacheViewResolver();
-        registry.viewResolver(resolver);
-    }
-    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         if (!registry.hasMappingForPattern("/**")) {
             registry.addResourceHandler("/**").addResourceLocations(
@@ -61,6 +60,7 @@ public class SpringConfig implements WebMvcConfigurer {
         }
 
     }
+
 
     @Bean
     public DataSource dataSource(){
@@ -73,7 +73,6 @@ public class SpringConfig implements WebMvcConfigurer {
 
         return dataSource;
     }
-
     @Bean
     public JdbcTemplate jdbcTemplate(){
         return new JdbcTemplate(dataSource());
@@ -83,17 +82,22 @@ public class SpringConfig implements WebMvcConfigurer {
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("user")
-                        .password("password")
+                User.builder().password("password").username("user")
                         .roles("USER", "ADMIN")
                         .build();
 
         return new InMemoryUserDetailsManager(user);
     }
     @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests().requestMatchers("/**").permitAll(); // config to permit all requests
+        http
+                .csrf().disable()
+                .authorizeHttpRequests()
+                .requestMatchers(PUBLIC_MATCHERS).permitAll(); // config to permit all requests
         return http.build();
     }
 

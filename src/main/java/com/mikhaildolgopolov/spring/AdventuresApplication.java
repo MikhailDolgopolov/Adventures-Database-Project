@@ -7,8 +7,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-		(exclude = {FlywayAutoConfiguration.class,
-		UserDetailsServiceAutoConfiguration.class})
+//		(exclude = {FlywayAutoConfiguration.class,
+//		UserDetailsServiceAutoConfiguration.class})
 public class AdventuresApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AdventuresApplication.class, args);
