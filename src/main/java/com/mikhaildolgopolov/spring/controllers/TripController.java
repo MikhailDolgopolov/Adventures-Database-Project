@@ -26,7 +26,7 @@ public class TripController {
     @ModelAttribute
     public void addAttributes(Model model){
         model.addAttribute("participants", new ArrayList<Person>());
-        List<Person> allPeople=personDAO.findAll();
+        List<Person> allPeople = personDAO.findAll();
         model.addAttribute("people", new PersonList(allPeople));
     }
     @GetMapping("/{id}")
