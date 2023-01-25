@@ -1,7 +1,6 @@
 package com.mikhaildolgopolov.spring.database.dao;
 
 import com.mikhaildolgopolov.spring.database.entities.Hotel;
-import com.mikhaildolgopolov.spring.database.entities.mappers.CountryMapper;
 import com.mikhaildolgopolov.spring.database.entities.mappers.HotelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

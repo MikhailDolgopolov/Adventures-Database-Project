@@ -1,8 +1,6 @@
 package com.mikhaildolgopolov.spring.database.dao;
 
 import com.mikhaildolgopolov.spring.database.entities.*;
-import com.mikhaildolgopolov.spring.database.entities.mappers.PersonMapper;
-import com.mikhaildolgopolov.spring.database.entities.mappers.SouvenirMapper;
 import com.mikhaildolgopolov.spring.database.entities.mappers.TripMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;

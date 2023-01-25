@@ -1,6 +1,5 @@
 package com.mikhaildolgopolov.spring.database.entities;
 
-import com.mikhaildolgopolov.spring.Transliteration;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

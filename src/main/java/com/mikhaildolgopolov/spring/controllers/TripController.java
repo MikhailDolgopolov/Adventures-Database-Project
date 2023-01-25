@@ -7,16 +7,15 @@ import com.mikhaildolgopolov.spring.database.entities.Person;
 import com.mikhaildolgopolov.spring.database.entities.Trip;
 import com.mikhaildolgopolov.spring.database.entities.TripPoint;
 import com.mikhaildolgopolov.spring.thymeleaf.PersonList;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings({"SameReturnValue", "SpringJavaAutowiredFieldsWarningInspection"})
 @Controller
 @RequestMapping("/trip/")
 public class TripController {

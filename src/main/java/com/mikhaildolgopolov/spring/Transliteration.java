@@ -1,15 +1,10 @@
 package com.mikhaildolgopolov.spring;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Transliteration {
-    private static Map<Character, String> map = new HashMap<Character, String>() {
+    private static final Map<Character, String> map = new HashMap<>() {
         {
             put('а', "a");
             put('б', "b");
@@ -47,13 +42,13 @@ public class Transliteration {
 
     public static String transliterate(String phrase) {
         if(phrase==null || phrase.equals("")) return "";
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         for (int i=0;i<phrase.length();i++){
             char ch = phrase.charAt(i);
             String add = map.getOrDefault(Character.toLowerCase(ch), Character.toString(ch));
-            result += (Character.isUpperCase(ch))?add.toUpperCase():add;
+            result.append((Character.isUpperCase(ch)) ? add.toUpperCase() : add);
         }
-        return result;
+        return result.toString();
     }
 }

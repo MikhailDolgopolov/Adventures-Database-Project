@@ -1,11 +1,7 @@
 package com.mikhaildolgopolov.spring.database;
 
-import com.mikhaildolgopolov.spring.ApplicationProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import java.util.Objects;
-import java.util.Properties;
 
 @Component
 public class DBProperties {

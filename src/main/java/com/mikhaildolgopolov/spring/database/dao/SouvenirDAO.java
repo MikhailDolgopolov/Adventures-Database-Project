@@ -26,22 +26,23 @@ public class SouvenirDAO {
                 new SouvenirMapper(), id).stream().findAny().orElse(null);
     }
     public List<Souvenir> findSouvenirs(@NotNull Trip trip){
-        String query = "SELECT Sv.* FROM main.souvenirs as Sv\n" +
-                "join main.trip_points as TP on Sv.trip_point_id = TP.trip_point_id\n" +
-                "WHERE TP.trip_id = ?\n" +
-                "UNION DISTINCT\n" +
-                "SELECT Sv.* FROM main.souvenirs as Sv\n" +
-                "join main.cities as Ct on Sv.city = Ct.city\n" +
-                "join main.trip_points as TP on Sv.trip_point_id = TP.trip_point_id\n" +
-                "WHERE TP.trip_id = ?\n" +
-                "UNION DISTINCT\n" +
-                "SELECT Sv.* FROM main.souvenirs as Sv\n" +
-                "join main.cities as Ct on Sv.city = Ct.city\n" +
-                "join main.sights as Si on Ct.city = Si.city\n" +
-                "join main.visited_sights as VS on Si.sight_id = VS.sight_id\n" +
-                "join main.trip_points as TP on VS.trip_point_id = TP.trip_point_id\n" +
-                "join main.trips as T on TP.trip_id = T.trip_id\n" +
-                "WHERE T.trip_id=?";
+        String query = """
+                SELECT Sv.* FROM main.souvenirs as Sv
+                join main.trip_points as TP on Sv.trip_point_id = TP.trip_point_id
+                WHERE TP.trip_id = ?
+                UNION DISTINCT
+                SELECT Sv.* FROM main.souvenirs as Sv
+                join main.cities as Ct on Sv.city = Ct.city
+                join main.trip_points as TP on Sv.trip_point_id = TP.trip_point_id
+                WHERE TP.trip_id = ?
+                UNION DISTINCT
+                SELECT Sv.* FROM main.souvenirs as Sv
+                join main.cities as Ct on Sv.city = Ct.city
+                join main.sights as Si on Ct.city = Si.city
+                join main.visited_sights as VS on Si.sight_id = VS.sight_id
+                join main.trip_points as TP on VS.trip_point_id = TP.trip_point_id
+                join main.trips as T on TP.trip_id = T.trip_id
+                WHERE T.trip_id=?""";
         return jdbcTemplate.query(query, new SouvenirMapper(),
                 trip.getTrip_id(), trip.getTrip_id(), trip.getTrip_id());
     }
