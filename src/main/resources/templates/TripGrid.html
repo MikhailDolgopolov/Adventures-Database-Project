@@ -1,0 +1,19 @@
+
+<form class = "grid-block filtered-trips" method="post" th:each = "trp : ${trips}"
+      th:action="@{trips/post/}" action="#" th:id="${trp.getTrip_id}"id="filtered-trips">
+  <input name="number" th:value="${trp.getTrip_id}" hidden>
+  <button class = "grid-button">
+    <h3 th:text="${trp.getTitle}"> Title </h3>
+    <span th:text="${trp.getStart_date}"> StartDate </span>
+    <span> - </span>
+    <span th:text="${trp.getEnd_date}"> EndDate</span>
+    <p th:if ="${trp.hasD}" th:text="${trp.getDescription}"> Description </p>
+  </button>
+</form>
+
+<div class="grid-block">
+  <button class="grid-button add-button" id="add-trip-b"
+          onclick="hide( 'add-trip-form', 'add-trip-b')">
+    <h3>Добавить путешествие</h3>
+  </button>
+</div>

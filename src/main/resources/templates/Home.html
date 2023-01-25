@@ -8,27 +8,24 @@
     <!--suppress SyntaxError -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/my_style.css}"/>
     <script src="/js/actions.js" type="text/javascript" th:href="@{js/actions.js}" ></script>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
 
 </head>
-<body onload="switchVis('add-trip-form')">
-<h1>Мои путешествия</h1>
+<body onload="LoadTrips()">
 
-<div class="grid" >
-    <form class = "grid-block" method="post" th:each = "trp : ${trips}"
-          th:action="@{trips/post/}" action="#" th:id="${trp.getTrip_id}">
-        <input name="number" th:value="${trp.getTrip_id}" hidden>
-        <button class = "grid-button">
-            <h3 th:text="${trp.getTitle}"> Title </h3>
-            <span th:text="${trp.getStart_date}"> StartDate </span>
-               <span> - </span>
-            <span th:text="${trp.getEnd_date}"> EndDate</span>
-            <p th:if ="${trp.hasD}" th:text="${trp.getDescription}"> Description </p>
-        </button>
+<h1>Мои путешествия</h1>
+<div>
+    <form method="post" th:action="@{trips/setFilter/}" action="#" id="filterForm">
+        <select id="filter" class="filter" name="filter" onchange="submitFilter()">
+            <option value="all">--Все--</option>
+            <option th:each="person : ${people}"
+                    th:value="${person.getPerson_id}" th:text="${person.generalName}"></option>
+        </select>
     </form>
-    <button class="grid-button add-button" id = "add-trip-b"
-            onclick="hide( 'add-trip-form', 'add-trip-b')">
-        <h3>Добавить путешествие</h3>
-    </button>
+</div>
+<div class="grid filtered-trips">
+
 </div>
 
 <form class="input-form" method="post" th:action="@{trips/add/}" id='add-trip-form'
@@ -39,7 +36,7 @@
         <p>Название: <input type="text" th:field="*{title}"></p>
         <p>Первый день: <input type="date" th:field="*{start_date}" class="calendar-grow"></p>
         <p>Последний день: <input type="date" th:field="*{end_date}" class="calendar-grow"></p>
-        <p>!!!Не сохраняется через контроллер!!!</p>
+
         <button type="submit" onclick="switchVisibility('add-trip-b', 'add-trip-form')">
             Добавить</button>
         <button type="reset" class="exit" onclick="hide( 'add-trip-form', 'add-trip-b')">x</button>

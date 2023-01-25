@@ -1,4 +1,7 @@
-
+function LoadTrips(){
+    switchVis('add-trip-form');
+    submitFilter();
+}
 function hide(id, other) {
     let vis1 = document.getElementById(id).style.display;
     if(vis1!=='none'){
@@ -17,4 +20,16 @@ function switchVis(id, was='block'){
     }else {
         document.getElementById(id).style.display = was;
     }
+}
+function submitFilter()
+{
+    $.ajax({
+        type: 'post',
+        data: {'filter':$('#filter').val()},
+        url: '/trips/setFilter/',
+
+        success: function(data){
+            $('.filtered-trips').html(data);
+        },
+    })
 }

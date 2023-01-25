@@ -18,9 +18,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring6.view.ThymeleafViewResolver;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import javax.sql.DataSource;
 
@@ -36,11 +41,12 @@ public class SpringConfig implements WebMvcConfigurer {
             "/static/**",
             "/resources/",
             "/**", "/trips/**","/trips/add/",
-            "/trip/**",
+            "/trip/**", "/fragments/"
     };
     private static final String[] RESOURCE_LOCATIONS = {
             "classpath:/META-INF/resources/", "classpath:/resources/",
-            "classpath:/static/", "classpath:/resources/static/" };
+            "classpath:/static/", "classpath:/resources/static/", "classpath:/templates/",
+            "classpath:/fragments"};
     private final ApplicationContext applicationContext;
 
     @Autowired
@@ -55,7 +61,25 @@ public class SpringConfig implements WebMvcConfigurer {
 
     }
 
+    @Bean
+    public ViewResolver htmlViewResolver() {
+        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+        resolver.setTemplateEngine(resolver.getTemplateEngine());
+        resolver.setContentType("text/html");
+        resolver.setCharacterEncoding("UTF-8");
+        resolver.setViewNames(new String[]{"*.html"});
+        return resolver;
+    }
 
+    private ITemplateResolver htmlTemplateResolver() {
+        SpringResourceTemplateResolver resolver
+                = new SpringResourceTemplateResolver();
+        resolver.setApplicationContext(applicationContext);
+        resolver.setPrefix("/WEB-INF/views/");
+        resolver.setCacheable(false);
+        resolver.setTemplateMode(TemplateMode.HTML);
+        return resolver;
+    }
     @Bean
     public DataSource dataSource(){
         var dataSource = new DriverManagerDataSource();

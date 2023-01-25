@@ -56,7 +56,20 @@ public class TripDAO {
         query+= join.substring(1, join.length()-1);
         System.out.println("part qurey: "+query);
         jdbcTemplate.update(query);
-
+    }
+    public List<Trip> findForPerson(Person person){
+        String query="SELECT T.* from main.trips as T " +
+                "join main.participation p on T.trip_id = p.trip_id " +
+                "join people p2 on p2.person_id = p.person_id " +
+                "WHERE p2.person_id=?";
+        return jdbcTemplate.query(query, new TripMapper(), person.getPerson_id());
+    }
+    public List<Trip> findForPersonById(int personId){
+        String query="SELECT T.* from main.trips as T " +
+                "join main.participation p on T.trip_id = p.trip_id " +
+                "join main.people p2 on p2.person_id = p.person_id " +
+                "WHERE p2.person_id=?";
+        return jdbcTemplate.query(query, new TripMapper(), personId);
     }
 
 

@@ -16,6 +16,7 @@ public class TripMapper implements RowMapper<Trip> {
         trip.setEnd_date(rs.getDate("end_date"));
         trip.setDescription(rs.getString("description"));
         trip.setPhoto_link(rs.getString("photo_link"));
+
         return trip;
     }
 }

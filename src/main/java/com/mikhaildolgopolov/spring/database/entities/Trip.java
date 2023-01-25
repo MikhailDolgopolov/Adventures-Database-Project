@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -45,7 +46,9 @@ public class Trip {
     }
     @Override
     public String toString(){
-        return title;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy");
+        return String.format("%s %s", title,
+                format.format(start_date));
     }
     public boolean hasD(){return description==null || description.isEmpty();}
 
