@@ -24,11 +24,11 @@ public class TripsController {
     }
     @PostMapping("/post/")
     public String test(@RequestParam String number, Model model){
-        return "redirect://localhost:8080/trip/"+number;
+        return "redirect:../../trip/"+number;
     }
     @PostMapping("/add/")
     public String addTrip(@ModelAttribute Trip trip){
-        return "redirect://localhost:8080/trips/";
+        return "redirect:../trips/";
     }
 
 }

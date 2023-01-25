@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -45,13 +46,17 @@ public class TripDAO {
                 trip.getTitle(), trip.getStart_date(), trip.getEnd_date(), trip.getDescription(), trip.getPhoto_link());
     }
 
-    public void AddParticipants(@NotNull Trip trip, @NotNull List<Person> list){
+    public void AddParticipants(@NotNull Trip trip, @NotNull List<Integer> list){
         String query = "INSERT INTO main.participation (trip_id, person_id) VALUES ";
+
+        System.out.println(list.size()+",  "+Arrays.deepToString(list.toArray()));
         List<String> data = new ArrayList<>();
-        for (Person p : list){
-            data.add(String.format("(%s, %s)", trip.getTrip_id(), p.getPerson_id()));
+        for (int person_id : list){
+            data.add(String.format("(%d, %d)", trip.getTrip_id(), person_id));
         }
-        query+= StringUtils.join(data);
+        String join = StringUtils.join(data);
+        query+= join.substring(1, join.length()-1);
+        System.out.println("part qurey: "+query);
         jdbcTemplate.update(query);
 
     }

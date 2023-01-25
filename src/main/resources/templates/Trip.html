@@ -4,11 +4,33 @@
     <meta charset="UTF-8">
     <title>Путешествие</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/my_style.css}"/>
-    <script type="text/javascript" th:href="@{js/actions.js}"></script>
+    <script src="/js/actions.js" type="text/javascript" th:href="@{js/actions.js}"></script>
 </head>
-<body>
+<body onload="switchVis('add-persons-form')">
 <h1 th:text="${trip.getTitle}">Title</h1>
+<div>
+    <ul>
+        <li th:each="person : ${participants}" th:value="${person.generalName}"></li>
+    </ul>
+    <button class="add-button" id = "add-persons-b"
+            onclick="hide( 'add-persons-form', 'add-persons-b')">
+        <h3>Добавить участников</h3>
+    </button>
 
+    <form class="input-form" method="post" th:action="@{participants/}" action="#"
+    id="add-persons-form" th:object ="${people}">
+        <input name="trip" th:value="${trip.getTrip_id()}" hidden>
+        <div class="window">
+            <label for="person-list">Выберите людей: </label>
+            <select th:field="*{intList}" id="person-list" multiple>
+                <option th:each="person : ${people.getPersonList()}"
+                        th:value="${person.getPerson_id}" th:text="${person.generalName}"></option>
+            </select>
+            <button type="submit">Добавить</button>
+            <button type="reset" class="exit" onclick="hide( 'add-persons-form', 'add-persons-b')">x</button>
+        </div>
+    </form>
+</div>
 <div class="grid" >
     <form class = "grid-block" method="post" th:each = "point : ${points}"
           th:action="@{points/post/}" action="#" th:id="${point.getTrip_point_id}">
@@ -19,7 +41,7 @@
     </form>
 </div>
 
-<form method="get" action="http://localhost:8080/trips/">
+<form method="get" action="../trips/">
     <button> <h3>Ко всем путешествиям</h3></button>
 </form>
 </body>

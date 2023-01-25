@@ -74,6 +74,9 @@ button:hover{
     border: black solid 5px;
     background-color: white;
 }
+.input-form{
+    width: auto;
+}
 .window{
     position: relative;
 }

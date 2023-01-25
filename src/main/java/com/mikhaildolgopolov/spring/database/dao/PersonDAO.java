@@ -19,13 +19,13 @@ public class PersonDAO {
     }
     public List<Person> findAll(){
 
-        return jdbcTemplate.query("SELECT * FROM people", new PersonMapper());
+        return jdbcTemplate.query("SELECT * FROM main.people", new PersonMapper());
     }
     public Person findById(int id){
-        return jdbcTemplate.query("SELECT * FROM people WHERE person_id=?",
+        return jdbcTemplate.query("SELECT * FROM main.people WHERE person_id=?",
                 new PersonMapper(), id).stream().findAny().orElse(null);
     }
-    public List<Person> findParticipants(@NotNull Trip trip){
+    public List<Person> findForTrip(@NotNull Trip trip){
         return jdbcTemplate.query("SELECT * FROM main.people " +
                 "join main.participation as P on main.people.person_id=P.person_id " +
                 "WHERE P.trip_id=?", new PersonMapper(), trip.getTrip_id());
