@@ -1,47 +1,20 @@
 <!DOCTYPE html>
-<!--suppress ALL -->
 <html lang="en">
 <head>
-    <base href="/">
-    <meta charset="UTF-8">
-    <title>Все путешествия</title>
-    <!--suppress SyntaxError -->
+    <meta charset="UTF-8"  name="viewport"
+          content="width=device-width, initial-scale=1.0"
+    >
+    <title>Главная страница</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/my_style.css}"/>
     <script src="/js/actions.js" type="text/javascript" th:href="@{js/actions.js}" ></script>
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-
-
 </head>
-<body onload="LoadTrips()">
-
-<h1>Мои путешествия</h1>
-<div>
-    <form method="post" th:action="@{trips/setFilter/}" action="#" id="filterForm">
-        <select id="filter" class="filter" name="filter" onchange="submitFilter()">
-            <option value="all">--Все--</option>
-            <option th:each="person : ${people}"
-                    th:value="${person.getPerson_id}" th:text="${person.generalName}"></option>
-        </select>
-    </form>
-</div>
-<div class="grid filtered-trips">
-
-</div>
-
-<form class="input-form" method="post" th:action="@{trips/add/}" id='add-trip-form'
-      action="../" th:object="${trip}">
-    <div class="add-button window">
-        <h3>Добавить путешествие</h3>
-
-        <p>Название: <input type="text" th:field="*{title}"></p>
-        <p>Первый день: <input type="date" th:field="*{start_date}" class="calendar-grow"></p>
-        <p>Последний день: <input type="date" th:field="*{end_date}" class="calendar-grow"></p>
-
-        <button type="submit" onclick="switchVisibility('add-trip-b', 'add-trip-form')">
-            Добавить</button>
-        <button type="reset" class="exit" onclick="hide( 'add-trip-form', 'add-trip-b')">x</button>
+<body>
+    <h1>Главная страница</h1>
+    <div class="vert-margins">
+        <form method="get" action="../trips/">
+            <button>Все путешествия</button>
+        </form>
     </div>
-
-</form>
 </body>
 </html>

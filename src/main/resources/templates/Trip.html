@@ -9,9 +9,9 @@
 </head>
 <body onload="switchVis('add-persons-form')">
 <h1 th:text="${trip.getTitle}">Title</h1>
-<div>
+<div class="input-form">
     <ul>
-        <li th:each="person : ${participants}" th:value="${person.generalName}"></li>
+        <li th:each="person : ${participants}" th:text="${person.generalName}"></li>
     </ul>
     <button class="add-button" id = "add-persons-b"
             onclick="hide( 'add-persons-form', 'add-persons-b')">

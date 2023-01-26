@@ -6,7 +6,7 @@ import com.mikhaildolgopolov.spring.database.dao.TripPointDAO;
 import com.mikhaildolgopolov.spring.database.entities.Person;
 import com.mikhaildolgopolov.spring.database.entities.Trip;
 import com.mikhaildolgopolov.spring.database.entities.TripPoint;
-import com.mikhaildolgopolov.spring.thymeleaf.PersonList;
+import com.mikhaildolgopolov.spring.helpers.PersonList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

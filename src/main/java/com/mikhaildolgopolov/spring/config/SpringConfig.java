@@ -39,7 +39,7 @@ public class SpringConfig implements WebMvcConfigurer {
             "/css/**",
             "/js/**",
             "/webjars/**",
-            "/static/**",
+            "/static/**","/static/img/",
             "/resources/**",
             "/**", "/trips/**","/trips/add/",
             "/trip/**", "/templates/fragments/"
@@ -47,7 +47,8 @@ public class SpringConfig implements WebMvcConfigurer {
     private static final String[] RESOURCE_LOCATIONS = {
             "classpath:/META-INF/resources/", "classpath:/resources/",
             "classpath:/static/", "classpath:/resources/static/", "classpath:/templates/",
-            "classpath:/resources/fragments/"};
+            "classpath:/resources/fragments/", "classpath:/resources/static/img/",
+            "classpath:/img/"};
     private final ApplicationContext applicationContext;
 
     @Autowired

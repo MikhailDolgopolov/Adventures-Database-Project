@@ -3,6 +3,7 @@ package com.mikhaildolgopolov.spring.controllers;
 import com.mikhaildolgopolov.spring.database.dao.PersonDAO;
 import com.mikhaildolgopolov.spring.database.dao.TripDAO;
 import com.mikhaildolgopolov.spring.database.entities.Trip;
+import com.mikhaildolgopolov.spring.helpers.YearSplitTrips;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,8 +26,11 @@ public class TripsController {
     @GetMapping("/")
     public String mainPage(Model model){
         model.addAttribute("people", personDAO.findAll());
-        model.addAttribute("trips", tripDAO.findAll());
-        return "Home";
+        List<Trip> list = tripDAO.findAll();
+
+        YearSplitTrips splitTrips = new YearSplitTrips(list);
+        model.addAttribute("trips",splitTrips);
+        return "AllTrips";
     }
     @PostMapping("/post/")
     public String test(@RequestParam String number, Model model)
@@ -41,13 +45,12 @@ public class TripsController {
 
     @PostMapping("/setFilter/")
     public String setFilter(@RequestParam("filter") String filter, RedirectAttributes attr){
-        System.out.println("Asking for id "+filter);
         if(filter.equals("all")){
-            List<Trip> trips = tripDAO.findAll();
+            YearSplitTrips trips = new YearSplitTrips(tripDAO.findAll());
             attr.addFlashAttribute("trips", trips);
         }else{
             attr.addFlashAttribute("trips",
-                    tripDAO.findForPersonById(Integer.parseInt(filter)));
+                    new YearSplitTrips(tripDAO.findForPersonById(Integer.parseInt(filter))));
         }
         return "redirect:../filtered/";
     }

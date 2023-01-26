@@ -1,4 +1,4 @@
-package com.mikhaildolgopolov.spring.thymeleaf;
+package com.mikhaildolgopolov.spring.helpers;
 
 import com.mikhaildolgopolov.spring.database.entities.Person;
 import lombok.AccessLevel;

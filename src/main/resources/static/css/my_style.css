@@ -4,12 +4,13 @@ body{
     margin: 0;
     padding: 0;
     --button-hover-margin: 3px;
+    --outer-margin: 3rem;
 }
 h1,h2,h3,h4{
     text-align:center;
     margin: 0;
-    padding-top: 0.4rem;
-    padding-bottom: 0.4rem;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
 }
 h1{
     padding: 0.7em;
@@ -17,6 +18,7 @@ h1{
 }
 
 button{
+    width: fit-content;
     padding: 0.5rem;
     background-color: gainsboro;
     border-width: 0;
@@ -28,17 +30,25 @@ button:hover{
     border-bottom: gray solid var(--button-hover-margin);
     background-color: lightgray;
 }
-
-.grid{
-    display: grid;
+.side-margins{
+    margin: 0 var(--outer-margin);
 }
-
+.vert-margins{
+    margin: var(--outer-margin) 0;
+}
+.grid{
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(max(30%, 40ch), 1fr));
+    gap: 1rem;
+}
+.trip-row{
+    padding: 1rem;
+}
 .grid-block{
-    max-width: 600px;
     position: relative;
-    display: -webkit-flex;
+    display: flex;
     flex-direction: column;
-    margin: 0.5rem 0.5rem 0;
 }
 .grid-block:not(:has(.add-button)):after{
     content: '';
@@ -55,8 +65,9 @@ button:hover{
     height: 100%;
 }
 .grid-button{
-    width: 100%;
-    height: 100%;
+    /*display: none;*/
+    width: auto;
+    height: auto;
     margin: 0;
 }
 .grid-button:hover,
@@ -65,7 +76,6 @@ button:hover{
 }
 .add-button{
     position: relative;
-    width: auto;
     height: auto;
     border: black solid 5px;
     transition: background-color 0.5s;
@@ -75,32 +85,38 @@ button:hover{
     background-color: white;
 }
 .input-form{
-    width: auto;
+    width: fit-content;
+}
+.selection{
+
+}
+.option{
+    outline: darkgrey solid 5px;
+    border: black solid 5px;
+    box-shadow: 0 0 1px 1px gray;
+}
+.left-flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+}
+.left-option{
+    right: 1rem;
+}
+.default-option{
+    font-size: 1rem;
+    color: darkgrey;
+}
+.shadow_under{
+    box-shadow: 0 0 1px 1px gray;
 }
 .window{
     position: relative;
 }
 .exit{
+    height: 3rem;
+    width: 3rem;
     position: absolute;
-    right: 0;
-    top: 0;
-    padding: 0 0.3em 0.1em;
-    transform: scaleY(0.8);
-    font-size: 1.6em;
-}
-
-@media (min-width: 500px) {
-    .grid{grid-template-columns: 1fr}
-}
-@media (min-width: 900px) {
-    .grid{grid-template-columns: repeat(2, 1fr)}
-}
-@media (min-width: 1200px) {
-    .grid{grid-template-columns: repeat(3, 1fr)}
-}
-@media (min-width: 1500px) {
-    .grid{grid-template-columns: repeat(4, 1fr)}
-}
-@media (min-width: 1800px) {
-    .grid{grid-template-columns: repeat(5, 1fr)}
+    right: 0.1rem;
+    top: 0.1rem;
 }

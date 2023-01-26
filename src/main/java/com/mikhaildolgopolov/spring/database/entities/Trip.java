@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.text.SimpleDateFormat;
@@ -11,7 +12,7 @@ import java.util.Date;
 
 @Entity
 @Table(schema = "main", name = "trips")
-public class Trip {
+public class Trip implements Comparable<Trip>{
     @Id
     @Getter(AccessLevel.PUBLIC) @Setter
     private int trip_id;
@@ -46,10 +47,17 @@ public class Trip {
     }
     @Override
     public String toString(){
+        return String.format("%s %d", title,
+                getYear());
+    }
+    public int getYear(){
         SimpleDateFormat format = new SimpleDateFormat("yyyy");
-        return String.format("%s %s", title,
-                format.format(start_date));
+        return Integer.parseInt(format.format(start_date));
     }
     public boolean hasD(){return description==null || description.isEmpty();}
 
+    @Override
+    public int compareTo(@NotNull Trip o) {
+        return start_date.compareTo(o.getStart_date());
+    }
 }
