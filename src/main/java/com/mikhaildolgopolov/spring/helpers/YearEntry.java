@@ -14,6 +14,9 @@ public class YearEntry implements Comparable<YearEntry>{
     @Getter(AccessLevel.PUBLIC) @Setter
     private HashSet<Trip> yearList;
 
+    public List<Trip> orderedTrips(){
+        return yearList.stream().sorted().toList();
+    };
     public YearEntry(int year){
         this.year=year;
         yearList=new HashSet<>();

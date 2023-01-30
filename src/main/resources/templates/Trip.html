@@ -7,43 +7,74 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/my_style.css}"/>
     <script src="/js/actions.js" type="text/javascript" th:href="@{js/actions.js}"></script>
 </head>
-<body onload="switchVis('add-persons-form')">
+<body onload="LoadTrip()">
 <h1 th:text="${trip.getTitle}">Title</h1>
-<div class="input-form">
-    <ul>
-        <li th:each="person : ${participants}" th:text="${person.generalName}"></li>
-    </ul>
-    <button class="add-button" id = "add-persons-b"
-            onclick="hide( 'add-persons-form', 'add-persons-b')">
-        <h3>Добавить участников</h3>
-    </button>
+<div class="side-margins">
+    <div class="spread-row up reverse">
+        <div>
+            <div class="window small-window">
+                <h2>Участники</h2>
+                <div class="hoverable spread-row" th:each="person : ${participants}">
+                    <p th:text="${person.generalName}"></p>
+                    <div class="right-flex row">
+                        <form method="post" th:action="@{deletePerson/}" action="#" id="del-part">
+                            <input name="trip" th:value="${trip.getTrip_id()}" hidden>
+                            <input name="person_id" th:value="${person.getPerson_id}" hidden>
+                            <button type="button" class="small-button show-element"
+                                    onclick="confirmDeletion('del-part')">
+                                <img class="fit-img" src="/img/bin.png">
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <button class="add-button" id="add-persons-b"
+                        onclick="HideOneShowAnother( 'add-persons-form', 'add-persons-b')">
+                    <h3>Добавить участников</h3>
+                </button>
+            </div>
+            <form class="input-form window shadow_under" method="post"
+                  th:action="@{participants/}" action="#"
+                  id="add-persons-form" th:object="${people}">
+                <input name="trip" th:value="${trip.getTrip_id()}" hidden>
+                <div class="window-header">
+                    <button type="reset" class="small-button"
+                            onclick="HideOneShowAnother( 'add-persons-form', 'add-persons-b')">
+                        <img class="fit-img" src="/img/close.png">
+                    </button>
+                    <h2>Добавить участников</h2>
+                </div>
+                <label for="person-list">Выберите людей: </label>
+                <select th:field="*{intList}" id="person-list" multiple>
+                    <option th:each="person : ${people.getPersonList()}"
+                            th:value="${person.getPerson_id}" th:text="${person.generalName}"></option>
+                </select>
+                <button type="submit">Добавить</button>
 
-    <form class="input-form" method="post" th:action="@{participants/}" action="#"
-    id="add-persons-form" th:object ="${people}">
-        <input name="trip" th:value="${trip.getTrip_id()}" hidden>
-        <div class="window">
-            <label for="person-list">Выберите людей: </label>
-            <select th:field="*{intList}" id="person-list" multiple>
-                <option th:each="person : ${people.getPersonList()}"
-                        th:value="${person.getPerson_id}" th:text="${person.generalName}"></option>
-            </select>
-            <button type="submit">Добавить</button>
-            <button type="reset" class="exit" onclick="hide( 'add-persons-form', 'add-persons-b')">x</button>
+            </form>
         </div>
-    </form>
-</div>
-<div class="grid" >
-    <form class = "grid-block" method="post" th:each = "point : ${points}"
-          th:action="@{points/post/}" action="#" th:id="${point.getTrip_point_id}">
-        <input name="number" th:value="${point.getTrip_point_id}" hidden>
-        <button class = "grid-button">
-            <h3 th:text="${point.getTitle}"> Title </h3>
-        </button>
-    </form>
-</div>
+        <div class="right-flex">
+            <button onclick="confirmDeletion('del-trip')">
+                <h3><span>Удалить </span><span th:text="${trip.getTitle}"></span></h3>
+            </button>
+            <form method="post" th:action="@{/trip/delete/}" id="del-trip">
+                <input name="id" th:value="${trip.getTrip_id()}" hidden>
+            </form>
+        </div>
+    </div>
+    <h2>Остановки</h2>
+    <div class="grid">
+        <form class="grid-block" method="post" th:each="point : ${points}"
+              th:action="@{points/post/}" action="#" th:id="${point.getTrip_point_id}">
+            <input name="number" th:value="${point.getTrip_point_id}" hidden>
+            <button class="grid-button">
+                <h3 th:text="${point.getTitle}"> Title </h3>
+            </button>
+        </form>
+    </div>
 
-<form method="get" action="../trips/">
-    <button> <h3>Ко всем путешествиям</h3></button>
-</form>
+    <form method="get" action="../trips/">
+        <button><h3>Ко всем путешествиям</h3></button>
+    </form>
+</div>
 </body>
 </html>

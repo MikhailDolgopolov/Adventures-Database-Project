@@ -1,8 +1,11 @@
 function LoadTrips(){
-    switchVis('add-trip-form');
+    ShowOrHide('add-trip-form');
     submitFilter();
 }
-function hide(id, other) {
+function LoadTrip(){
+    ShowOrHide('add-persons-form');
+}
+function HideOneShowAnother(id, other) {
     let vis1 = document.getElementById(id).style.display;
     if(vis1!=='none'){
         document.getElementById(id).style.display='none'
@@ -13,7 +16,7 @@ function hide(id, other) {
     }
 }
 
-function switchVis(id, was='block'){
+function ShowOrHide(id, was='block'){
     let vis = document.getElementById(id).style.display;
     if(vis!=='none') {
         document.getElementById(id).style.display = 'none'
@@ -32,4 +35,9 @@ function submitFilter()
             $('.filtered-trips').html(data);
         },
     })
+}
+function confirmDeletion(id){
+    if(confirm('Вы собираетесь удалить данные. Продолжить?')){
+        document.getElementById(id).submit();
+    }
 }

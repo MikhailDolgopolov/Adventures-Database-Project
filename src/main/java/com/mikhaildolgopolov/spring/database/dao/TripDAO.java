@@ -44,17 +44,19 @@ public class TripDAO {
                 trip.getTitle(), trip.getStart_date(), trip.getEnd_date(), trip.getDescription(), trip.getPhoto_link());
     }
 
+    public void delete(int trip_id){
+        jdbcTemplate.update("DELETE FROM main.trips WHERE trip_id=?", trip_id);
+    }
     public void AddParticipants(@NotNull Trip trip, @NotNull List<Integer> list){
         String query = "INSERT INTO main.participation (trip_id, person_id) VALUES ";
 
-        System.out.println(list.size()+",  "+Arrays.deepToString(list.toArray()));
         List<String> data = new ArrayList<>();
         for (int person_id : list){
             data.add(String.format("(%d, %d)", trip.getTrip_id(), person_id));
         }
         String join = StringUtils.join(data);
         query+= join.substring(1, join.length()-1);
-        System.out.println("part qurey: "+query);
+
         jdbcTemplate.update(query);
     }
     public List<Trip> findForPerson(Person person){
@@ -72,6 +74,10 @@ public class TripDAO {
         return jdbcTemplate.query(query, new TripMapper(), personId);
     }
 
-
+    public void deleteParticipant(int tripId, int person){
+        String query = String.format("DELETE FROM main.participation " +
+                "WHERE person_id=%d and participation.trip_id=%d", person, tripId);
+        jdbcTemplate.update(query);
+    }
 
 }

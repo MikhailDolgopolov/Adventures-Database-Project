@@ -17,34 +17,48 @@
 <body onload="LoadTrips()">
 
 <h1>Мои путешествия</h1>
-<div class="left-flex">
-    <form class="left-option" method="post" th:action="@{trips/setFilter/}" action="#" id="filterForm">
-        Показать путешествия для:<span>   </span>
-        <select id="filter" class="selection" onchange="submitFilter()">
-            <option class="option default-option" value="all">--Все--</option>
-            <option class="option" th:each="person : ${people}"
-                    th:value="${person.getPerson_id}" th:text="${person.generalName}"></option>
-        </select>
-    </form>
-</div>
-<div class="filtered-trips side-margins">
 
-</div>
-
-<form class="input-form" method="post" th:action="@{trips/add/}" id='add-trip-form'
-      action="../" th:object="${trip}">
-    <div class="add-button window">
-        <h3>Добавить путешествие</h3>
-
-        <p>Название: <input type="text" th:field="*{title}"></p>
-        <p>Первый день: <input type="date" th:field="*{start_date}" class="calendar-grow"></p>
-        <p>Последний день: <input type="date" th:field="*{end_date}" class="calendar-grow"></p>
-
-        <button type="submit">Добавить</button>
-        <button type="reset" class="exit" onclick="hide( 'add-trip-form', 'add-trip-b')">
-
+<div class="side-margins">
+    <div class="spread-row down">
+        <form method="post" class="vert-margins" action="#" th:action="@{/trips/add/}"
+              id='add-trip-form' th:object="${trip}">
+            <div class="window input-form shadow_under">
+                <div class="window-header">
+                    <button type="reset" class="small-button" onclick="HideOneShowAnother( 'add-trip-form', 'add-trip-b')">
+                        <img class="fit-img" src="/img/close.png">
+                    </button>
+                    <h2>Добавить путешествие</h2>
+                </div>
+                <div class="spread-row">
+                    <label for="trip-title">Название: </label>
+                    <input id="trip-title" type="text" th:field="*{title}" required>
+                </div>
+                <div class="spread-row">
+                    <label for="trip-start-date">Первый день: </label>
+                    <input id="trip-start-date" type="date" th:field="*{start_date}" required></div>
+                <div class="spread-row">
+                    <label for="trip-end-date">Последний день: </label>
+                    <input id="trip-end-date" type="date" th:field="*{end_date}">
+                </div>
+                <button class="spread-row" type="submit">Добавить</button>
+            </div>
+        </form>
+        <button class="add-button" id="add-trip-b"
+                onclick="HideOneShowAnother( 'add-trip-form', 'add-trip-b')">
+            <h3>Добавить путешествие</h3>
         </button>
+        <div class="right-flex">
+            <form class="vert-margins" method="post" th:action="@{trips/setFilter/}" action="#" id="filterForm">
+                Показать путешествия для:<span>   </span>
+                <select id="filter" class="selection" onchange="submitFilter()">
+                    <option class="option default-option" value="all">--Все--</option>
+                    <option class="option" th:each="person : ${people}"
+                            th:value="${person.getPerson_id}" th:text="${person.generalName}"></option>
+                </select>
+            </form>
+        </div>
     </div>
-</form>
+    <div class="filtered-trips"></div>
+</div>
 </body>
 </html>

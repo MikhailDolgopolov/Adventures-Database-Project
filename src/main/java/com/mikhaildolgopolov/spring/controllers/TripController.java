@@ -42,12 +42,24 @@ public class TripController {
         return "Trip";
     }
 
+    @PostMapping("/delete/")
+    public String deleteTrip(@RequestParam("id") int trip_id){
+        tripDAO.delete(trip_id);
+        return "redirect:../../trips/";
+    }
     @PostMapping("/participants/")
     public String addPeople(@RequestParam("trip") int tripId,
                             @ModelAttribute PersonList list,
                             Model model){
         tripDAO.AddParticipants(tripDAO.findById(tripId), list.getIntList());
         return "redirect:../"+tripId;
+    }
+
+    @PostMapping("/deletePerson/")
+    public String deletePerson(@RequestParam("trip") int trip_id,
+                               @RequestParam("person_id") int person_id){
+        tripDAO.deleteParticipant(trip_id, person_id);
+        return "redirect:../"+trip_id;
     }
 
 }

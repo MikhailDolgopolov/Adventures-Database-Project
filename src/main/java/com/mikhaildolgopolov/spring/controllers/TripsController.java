@@ -40,7 +40,7 @@ public class TripsController {
     @PostMapping("/add/")
     public String addTrip(@ModelAttribute Trip trip){
         tripDAO.save(trip);
-        return "redirect:../trips/";
+        return "redirect:../";
     }
 
     @PostMapping("/setFilter/")
