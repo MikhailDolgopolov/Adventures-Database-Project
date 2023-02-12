@@ -13,16 +13,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 
-@Controller
+@CrossOrigin
+@RestController
 @RequestMapping("/trips/")
 public class TripsController {
     @Autowired private TripDAO tripDAO;
     @Autowired private PersonDAO personDAO;
-    @ModelAttribute
-    public void addAttributes(Model model){
-        model.addAttribute("people", personDAO.findAll());
-        model.addAttribute("trip", new Trip());
-    }
     @GetMapping("/")
     public String mainPage(Model model){
         model.addAttribute("people", personDAO.findAll());
@@ -31,6 +27,10 @@ public class TripsController {
         YearSplitTrips splitTrips = new YearSplitTrips(list);
         model.addAttribute("trips",splitTrips);
         return "AllTrips";
+    }
+    @GetMapping(path = "/json")
+    public YearSplitTrips getTrips(){
+        return new YearSplitTrips(tripDAO.findAll());
     }
     @PostMapping("/post/")
     public String test(@RequestParam String number, Model model)
