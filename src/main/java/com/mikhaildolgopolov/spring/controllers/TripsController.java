@@ -14,11 +14,17 @@ import java.util.List;
 
 
 @CrossOrigin
+//@Controller
 @RestController
 @RequestMapping("/trips/")
 public class TripsController {
     @Autowired private TripDAO tripDAO;
     @Autowired private PersonDAO personDAO;
+    @ModelAttribute
+    public void addAttributes(Model model){
+        model.addAttribute("people", personDAO.findAll());
+        model.addAttribute("trip", new Trip());
+    }
     @GetMapping("/")
     public String mainPage(Model model){
         model.addAttribute("people", personDAO.findAll());
@@ -28,7 +34,7 @@ public class TripsController {
         model.addAttribute("trips",splitTrips);
         return "AllTrips";
     }
-    @GetMapping(path = "/json")
+    @GetMapping(path = "/json/", produces = "application/json")
     public YearSplitTrips getTrips(){
         return new YearSplitTrips(tripDAO.findAll());
     }
@@ -44,8 +50,8 @@ public class TripsController {
     }
 
     @PostMapping("/setFilter/")
-    public String setFilter(@RequestParam("filter") String filter, RedirectAttributes attr){
-        if(filter.equals("all")){
+    public String setFilter(@RequestParam(name = "filter", required = false) String filter, RedirectAttributes attr){
+        if(filter.isEmpty() || filter.equals("all")){
             YearSplitTrips trips = new YearSplitTrips(tripDAO.findAll());
             attr.addFlashAttribute("trips", trips);
         }else{
