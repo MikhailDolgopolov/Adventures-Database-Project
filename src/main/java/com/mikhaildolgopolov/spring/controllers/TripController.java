@@ -16,37 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({"SameReturnValue", "SpringJavaAutowiredFieldsWarningInspection"})
-@Controller
+@RestController
 @RequestMapping("/trip/")
 public class TripController {
     @Autowired private TripDAO tripDAO;
     @Autowired private TripPointDAO tripPointDAO;
     @Autowired private PersonDAO personDAO;
-    @ModelAttribute
-    public void addAttributes(Model model){
-        model.addAttribute("participants", new ArrayList<Person>());
-        List<Person> allPeople = personDAO.findAll();
-        model.addAttribute("people", new PersonList(allPeople));
-    }
-    @GetMapping("/{id}")
-    public String getTrip(@PathVariable int id, Model model){
-        Trip trip = tripDAO.findById(id);
-        model.addAttribute("trip", trip);
-
-        List<TripPoint> tripPoints = tripPointDAO.findForTrip(trip);
-        model.addAttribute("points", tripPoints);
-
-        List<Person> participants = personDAO.findForTrip(trip);
-        model.addAttribute("participants", participants);
-
-        return "Trip";
-    }
-
-    @PostMapping("/delete/")
-    public String deleteTrip(@RequestParam("id") int trip_id){
-        tripDAO.delete(trip_id);
-        return "redirect:../../trips/";
-    }
     @PostMapping("/participants/")
     public String addPeople(@RequestParam("trip") int tripId,
                             @ModelAttribute PersonList list,

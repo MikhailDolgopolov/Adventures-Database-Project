@@ -3,6 +3,7 @@ package com.mikhaildolgopolov.spring.controllers;
 import com.mikhaildolgopolov.spring.database.dao.PersonDAO;
 import com.mikhaildolgopolov.spring.database.dao.TripDAO;
 import com.mikhaildolgopolov.spring.database.entities.Trip;
+import com.mikhaildolgopolov.spring.helpers.YearEntry;
 import com.mikhaildolgopolov.spring.helpers.YearSplitTrips;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,48 +21,38 @@ import java.util.List;
 public class TripsController {
     @Autowired private TripDAO tripDAO;
     @Autowired private PersonDAO personDAO;
-    @ModelAttribute
-    public void addAttributes(Model model){
-        model.addAttribute("people", personDAO.findAll());
-        model.addAttribute("trip", new Trip());
-    }
-    @GetMapping("/")
-    public String mainPage(Model model){
-        model.addAttribute("people", personDAO.findAll());
-        List<Trip> list = tripDAO.findAll();
-
-        YearSplitTrips splitTrips = new YearSplitTrips(list);
-        model.addAttribute("trips",splitTrips);
-        return "AllTrips";
-    }
     @GetMapping(path = "/json/", produces = "application/json")
-    public YearSplitTrips getTrips(){
-        return new YearSplitTrips(tripDAO.findAll());
+    public List<YearEntry> getTrips(){
+        return new YearSplitTrips(tripDAO.findAll()).list;
     }
-    @PostMapping("/post/")
-    public String test(@RequestParam String number, Model model)
-    {
-        return "redirect:../../trip/"+number;
+    @GetMapping(path = "/list/", produces = "application/json")
+    public List<Trip> justTrips(){
+        return tripDAO.findAll();
     }
-    @PostMapping("/add/")
-    public String addTrip(@ModelAttribute Trip trip){
-        tripDAO.save(trip);
-        return "redirect:../";
+    @PostMapping(value = "/create/",
+            consumes = "application/json", produces = "application/json")
+    public Trip addTrip(@RequestBody Trip trip){
+        return tripDAO.save(trip);
+    }
+    @PostMapping(value = "/update/",
+    consumes = "application/json", produces = "application/json")
+    public Trip updateTrip(@RequestBody Trip trip){
+        return tripDAO.update(trip);
+    }
+    @PostMapping(value = "/delete/",
+            consumes = "application/json")
+    public String deleteTrip(@RequestBody int id){
+        System.out.println(id);
+        tripDAO.delete(id);
+        return "Ok";
     }
 
-    @PostMapping("/setFilter/")
-    public String setFilter(@RequestParam(name = "filter", required = false) String filter, RedirectAttributes attr){
-        if(filter.isEmpty() || filter.equals("all")){
-            YearSplitTrips trips = new YearSplitTrips(tripDAO.findAll());
-            attr.addFlashAttribute("trips", trips);
+    @PostMapping("/filter/")
+    public List<YearEntry> setFilter(@RequestBody int id){
+        if(id<1){
+            return new YearSplitTrips(tripDAO.findAll()).list;
         }else{
-            attr.addFlashAttribute("trips",
-                    new YearSplitTrips(tripDAO.findForPersonById(Integer.parseInt(filter))));
+            return new YearSplitTrips(tripDAO.findForPersonById(id)).list;
         }
-        return "redirect:../filtered/";
-    }
-    @GetMapping("/filtered/")
-    public String filteredTrips(Model model){
-        return "TripGrid";
     }
 }

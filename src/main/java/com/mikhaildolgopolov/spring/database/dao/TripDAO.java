@@ -28,20 +28,31 @@ public class TripDAO {
         return jdbcTemplate.query("SELECT * FROM main.trips WHERE trip_id=?",
                 new TripMapper(), id).stream().findAny().orElse(null);
     }
-    public void update(@NotNull Trip trip){
+    public Trip findByTitle(String title){
+        return jdbcTemplate.query("SELECT * FROM main.trips WHERE title=?",
+                new TripMapper(), title).stream().findAny().orElse(null);
+    }
+    public Trip update(@NotNull Trip trip){
         jdbcTemplate.update(
                 "UPDATE main.trips SET " +
                         "title=?, start_date=?, end_date=?, description=?, photo_link=?" +
                         "WHERE trip_id=?",
                 trip.getTitle(), trip.getStart_date(), trip.getEnd_date(),
                 trip.getDescription(), trip.getPhoto_link(), trip.getTrip_id());
+        return trip;
     }
-    public void save(@NotNull Trip trip){
-        if(trip.getTitle().equals(new Trip().getTitle())) return;
+    public Trip save(@NotNull Trip trip){
+        if(trip.getTitle().equals(new Trip().getTitle()))
+            return findById(-1);
+        if(findByTitle(trip.getTitle())!=null) {
+            update(trip);
+            return findByTitle(trip.getTitle());
+        }
         jdbcTemplate.update("INSERT INTO main.trips" +
                         "(title, start_date, end_date, description, photo_link)" +
                         " VALUES (?, ?, ?, ?, ?)",
                 trip.getTitle(), trip.getStart_date(), trip.getEnd_date(), trip.getDescription(), trip.getPhoto_link());
+        return findByTitle(trip.getTitle());
     }
 
     public void delete(int trip_id){

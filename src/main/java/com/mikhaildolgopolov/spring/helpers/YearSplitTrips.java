@@ -28,10 +28,6 @@ public class YearSplitTrips {
         }
         current.add(trip);
     }
-    public int tripsStored(){
-       return list.stream().map(e->e.getYearList().size())
-               .reduce(0, Integer::sum);
-    }
 
 
 }

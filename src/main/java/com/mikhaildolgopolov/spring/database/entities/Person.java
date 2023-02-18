@@ -25,9 +25,6 @@ public class Person {
     @Getter @Setter
     private String alias;
 
-    @Temporal(TemporalType.DATE)
-    @Getter @Setter
-    private Date birth_date;
 
     public String generalName(){
         if(alias.isBlank()) return last_name+" "+first_name;

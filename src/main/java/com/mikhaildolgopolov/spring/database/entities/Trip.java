@@ -57,7 +57,6 @@ public class Trip implements Comparable<Trip>{
             }
         }
     }
-    public boolean hasD(){return description==null || description.isEmpty();}
 
     @Override
     public int compareTo(@NotNull Trip o) {

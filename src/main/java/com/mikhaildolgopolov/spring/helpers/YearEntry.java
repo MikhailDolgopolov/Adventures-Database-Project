@@ -12,25 +12,20 @@ public class YearEntry implements Comparable<YearEntry>{
     @Getter (AccessLevel.PUBLIC) @Setter
     private int year;
     @Getter(AccessLevel.PUBLIC) @Setter
-    private HashSet<Trip> yearList;
+    private List<Trip> yearList;
 
-    public List<Trip> orderedTrips(){
-        return yearList.stream().sorted().toList();
-    };
     public YearEntry(int year){
         this.year=year;
-        yearList=new HashSet<>();
+        yearList=new ArrayList<>();
     }
     public void add(Trip trip){
-        if(trip.getYear()==year) yearList.add(trip);
+        if(trip.getYear()==year){
+            if(!yearList.contains(trip))
+                yearList.add(trip);
+        }
+        Collections.sort(yearList);
     }
     public boolean checkYear(int y){return y==year;}
-    public static boolean containsYear(List<YearEntry> list, int year){
-        boolean exists = list.stream().map(e -> e.checkYear(year))
-                .reduce(Boolean.FALSE, Boolean::logicalOr);
-        return exists;
-    }
-
 
     @Override
     public int compareTo(@NotNull YearEntry o) {

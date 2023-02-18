@@ -16,7 +16,6 @@ public class PersonMapper implements RowMapper<Person> {
         p.setLast_name(rs.getString("last_name"));
         p.setPatronym(rs.getString("patronym"));
         p.setAlias(rs.getString("alias"));
-        p.setBirth_date(rs.getDate("birth_date"));
         return p;
     }
 }
