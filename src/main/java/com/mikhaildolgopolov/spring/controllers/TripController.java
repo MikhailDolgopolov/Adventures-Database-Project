@@ -4,15 +4,10 @@ import com.mikhaildolgopolov.spring.database.dao.PersonDAO;
 import com.mikhaildolgopolov.spring.database.dao.TripDAO;
 import com.mikhaildolgopolov.spring.database.dao.TripPointDAO;
 import com.mikhaildolgopolov.spring.database.entities.Person;
-import com.mikhaildolgopolov.spring.database.entities.Trip;
-import com.mikhaildolgopolov.spring.database.entities.TripPoint;
 import com.mikhaildolgopolov.spring.helpers.PersonList;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({"SameReturnValue", "SpringJavaAutowiredFieldsWarningInspection"})
@@ -22,19 +17,24 @@ public class TripController {
     @Autowired private TripDAO tripDAO;
     @Autowired private TripPointDAO tripPointDAO;
     @Autowired private PersonDAO personDAO;
-    @PostMapping("/participants/")
-    public String addPeople(@RequestParam("trip") int tripId,
-                            @ModelAttribute PersonList list,
-                            Model model){
-        tripDAO.AddParticipants(tripDAO.findById(tripId), list.getIntList());
-        return "redirect:../"+tripId;
+
+    @GetMapping(value = "/{trip}/participants/", produces = "application/json")
+    public List<Person> getParticipants(@PathVariable("trip") int trip){
+        return personDAO.findForTripById(trip);
+    }
+    @PostMapping(value = "/{trip}/participants/add/", produces = "application/json")
+    public List<Person> addPeople(@PathVariable("trip") int tripId,
+                            @RequestBody List<Integer> list){
+        tripDAO.AddParticipants(tripDAO.findById(tripId), list);
+        return personDAO.findForTripById(tripId);
     }
 
-    @PostMapping("/deletePerson/")
-    public String deletePerson(@RequestParam("trip") int trip_id,
-                               @RequestParam("person_id") int person_id){
+    @PostMapping(value = "/{trip}/participants/delete/",
+            produces = "application/json")
+    public List<Person> deletePerson(@PathVariable("trip") int trip_id,
+                               @RequestBody int person_id){
         tripDAO.deleteParticipant(trip_id, person_id);
-        return "redirect:../"+trip_id;
+        return personDAO.findForTripById(trip_id);
     }
 
 }

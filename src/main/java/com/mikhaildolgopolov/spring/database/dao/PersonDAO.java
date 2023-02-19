@@ -25,10 +25,10 @@ public class PersonDAO {
         return jdbcTemplate.query("SELECT * FROM main.people WHERE person_id=?",
                 new PersonMapper(), id).stream().findAny().orElse(null);
     }
-    public List<Person> findForTrip(@NotNull Trip trip){
+    public List<Person> findForTripById(int tripId){
         return jdbcTemplate.query("SELECT * FROM main.people " +
                 "join main.participation as P on main.people.person_id=P.person_id " +
-                "WHERE P.trip_id=?", new PersonMapper(), trip.getTrip_id());
+                "WHERE P.trip_id=?", new PersonMapper(),tripId);
     }
 
 }
