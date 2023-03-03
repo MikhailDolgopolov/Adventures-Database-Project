@@ -24,4 +24,7 @@ public class TripPoint {
 
     @Getter @Setter
     private String city;
+
+    @Getter @Setter
+    private int trip_order;
 }

@@ -4,13 +4,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@SuppressWarnings("SameReturnValue")
-@Controller
-@RequestMapping("/trip-point/")
-public class TripPointController {
-    @GetMapping("/")
-    public String main(Model model){
-        return "Point";
-    }
+
+@RestController
+@RequestMapping("/trip-points/")
+public class TripPointsController {
+
 }

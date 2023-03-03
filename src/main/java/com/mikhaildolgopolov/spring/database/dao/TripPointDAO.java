@@ -26,8 +26,17 @@ public class TripPointDAO {
         return jdbcTemplate.query("SELECT * FROM main.trip_points WHERE trip_point_id=?",
                 new TripPointMapper(), id).stream().findAny().orElse(null);
     }
-    public List<TripPoint> findForTrip(Trip trip){
+    public List<TripPoint> findForTripBtId(int trip_id){
         String query = "SELECT * FROM main.trip_points WHERE trip_id=? ORDER BY trip_order DESC";
-        return jdbcTemplate.query(query, new TripPointMapper(), trip.getTrip_id());
+        return jdbcTemplate.query(query, new TripPointMapper(), trip_id);
+    }
+
+    public List<TripPoint> save(TripPoint newPoint, int trip_id){
+        String query = "INSERT INTO main.trip_points " +
+                "(title, trip_id, city, trip_order)" +
+                "VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(query, newPoint.getTitle(), newPoint.getTrip_id(),
+                newPoint.getCity(), newPoint.getTrip_order());
+        return findForTripBtId(trip_id);
     }
 }

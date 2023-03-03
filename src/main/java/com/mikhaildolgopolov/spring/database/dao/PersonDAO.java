@@ -19,7 +19,7 @@ public class PersonDAO {
     }
     public List<Person> findAll(){
 
-        return jdbcTemplate.query("SELECT * FROM main.people", new PersonMapper());
+        return jdbcTemplate.query("SELECT * FROM main.people ORDER BY last_name, first_name", new PersonMapper());
     }
     public Person findById(int id){
         return jdbcTemplate.query("SELECT * FROM main.people WHERE person_id=?",

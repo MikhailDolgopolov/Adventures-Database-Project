@@ -41,10 +41,8 @@ public class TripsController {
     }
     @PostMapping(value = "/delete/",
             consumes = "application/json")
-    public String deleteTrip(@RequestBody int id){
-        System.out.println(id);
+    public void deleteTrip(@RequestBody int id){
         tripDAO.delete(id);
-        return "Ok";
     }
 
     @PostMapping("/filter/")

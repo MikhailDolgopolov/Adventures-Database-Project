@@ -23,6 +23,9 @@ public class TripDAO {
     public List<Trip> findAll(){
         return jdbcTemplate.query("SELECT * FROM main.trips ORDER BY start_date DESC", new TripMapper());
     }
+    public int CountAll(){
+        return jdbcTemplate.queryForObject("SELECT COUNT(trip_id) as trip_count from main.trips", Integer.class);
+    }
 
     public Trip findById(int id){
         return jdbcTemplate.query("SELECT * FROM main.trips WHERE trip_id=?",

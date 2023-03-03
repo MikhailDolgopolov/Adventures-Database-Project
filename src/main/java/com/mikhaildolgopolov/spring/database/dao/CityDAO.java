@@ -19,11 +19,17 @@ public class CityDAO {
     }
 
     public List<City> findAll(){
-        return jdbcTemplate.query("SELECT * from main.cities", new CityMapper());
+        return jdbcTemplate.query("SELECT * from main.cities ORDER BY city", new CityMapper());
     }
-    public City findById(String name){
+    public City findByName(String name){
         return jdbcTemplate.query("SELECT * FROM main.cities WHERE city=?",
                 new CityMapper(), name).stream().findAny().orElse(null);
+    }
+    public City save(City city){
+        String query = "INSERT INTO main.cities (city, country)" +
+                "VALUES (?,?)";
+        jdbcTemplate.update(query, city.getCity(), city.getCountry());
+        return findByName(city.getCity());
     }
     public List<City> findForTrip(@NotNull Trip trip){
         String query = """

@@ -16,24 +16,32 @@ public class CountryDAO {
     public CountryDAO(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
     }
-
-    public List<Country> findAll(){
-        return jdbcTemplate.query("SELECT * FROM main.countries", new CountryMapper());
-    }
-
-    public Country findById(String name){
-        return jdbcTemplate.query("SELECT * from main.countries WHERE country=?",
-                new CountryMapper(), name).stream().findAny().orElse(null);
-    }
-    public List<Country> findForPerson(Person person){
-        String query = """
+    private final String queryAll="""
                 SELECT Cr.* FROM main.countries as Cr join main.cities as Ct on Ct.country=Cr.country join main.trip_points as TP on Ct.city = TP.city join main.trips as T on TP.trip_id = T.trip_id join main.participation as Pt on T.trip_id=Pt.trip_id join main.people as P on Pt.person_id=?UNION DISTINCT
                 SELECT Cr.* FROM main.countries as Cr join main.cities as Ct on Ct.country=Cr.country join main.souvenirs as Sv on Sv.city = Ct.city join main.trip_points as TP on Sv.trip_point_id = TP.trip_point_id join main.trips as T on TP.trip_id = T.trip_id join main.participation as Pt on T.trip_id=Pt.trip_id join main.people as P on Pt.person_id=?UNION DISTINCT
                 SELECT Cr.* FROM main.countries as Cr join main.cities as Ct on Ct.country=Cr.country join main.souvenirs as Sv on Sv.city = Ct.city join main.sights as Si on Ct.city = Si.city
                 join main.visited_sights as VS on Si.sight_id = VS.sight_id
                 join main.trip_points as TP on VS.trip_point_id = TP.trip_point_id
-                join main.trips as T on TP.trip_id = T.trip_id
-                join main.participation as Pt on T.trip_id=Pt.trip_id join main.people as P on Pt.person_id=?""";
+                join main.trips as T on TP.trip_id = T.trip_id""";
+
+
+    public List<Country> findAll(){
+        return jdbcTemplate.query("SELECT * FROM main.countries ORDER BY country", new CountryMapper());
+    }
+
+    public Country findByName(String name){
+        return jdbcTemplate.query("SELECT * from main.countries WHERE country=?",
+                new CountryMapper(), name).stream().findAny().orElse(null);
+    }
+    public Country saveNew(Country country){
+        String query="INSERT INTO main.countries (country)" +
+                "VALUES (?)";
+        jdbcTemplate.update(query, country.getCountry());
+        return findByName(country.getCountry());
+    }
+
+    public List<Country> findForPerson(Person person){
+        String query = queryAll+" join main.participation as Pt on T.trip_id=Pt.trip_id join main.people as P on Pt.person_id=?";
         return jdbcTemplate.query(query, new CountryMapper(),
                 person.getPerson_id(), person.getPerson_id(), person.getPerson_id());
     }
