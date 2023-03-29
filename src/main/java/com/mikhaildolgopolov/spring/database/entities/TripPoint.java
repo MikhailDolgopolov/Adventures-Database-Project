@@ -27,4 +27,8 @@ public class TripPoint {
 
     @Getter @Setter
     private int trip_order;
+
+    public String toString(){
+        return trip_order+". "+title;
+    }
 }

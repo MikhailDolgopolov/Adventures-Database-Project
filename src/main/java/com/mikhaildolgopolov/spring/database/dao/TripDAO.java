@@ -2,12 +2,15 @@ package com.mikhaildolgopolov.spring.database.dao;
 
 import com.mikhaildolgopolov.spring.database.entities.*;
 import com.mikhaildolgopolov.spring.database.entities.mappers.TripMapper;
+import com.mikhaildolgopolov.spring.database.entities.mappers.YearMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +38,14 @@ public class TripDAO {
         return jdbcTemplate.query("SELECT * FROM main.trips WHERE title=?",
                 new TripMapper(), title).stream().findAny().orElse(null);
     }
+
+    public List<Trip> findByYear(int year){
+        return jdbcTemplate.query("SELECT * FROM main.trips WHERE year=?",
+                new TripMapper(), year);
+    }
+    public List<Integer> findTripYears() {
+        return jdbcTemplate.query("SELECT DISTINCT year FROM main.trips ORDER BY year DESC ", new YearMapper());
+    }
     public Trip update(@NotNull Trip trip){
         jdbcTemplate.update(
                 "UPDATE main.trips SET " +
@@ -42,7 +53,7 @@ public class TripDAO {
                         "WHERE trip_id=?",
                 trip.getTitle(), trip.getStart_date(), trip.getEnd_date(),
                 trip.getDescription(), trip.getPhoto_link(), trip.getTrip_id());
-        return trip;
+        return findById(trip.getTrip_id());
     }
     public Trip save(@NotNull Trip trip){
         if(trip.getTitle().equals(new Trip().getTitle()))
