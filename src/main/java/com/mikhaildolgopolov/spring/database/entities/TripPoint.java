@@ -7,11 +7,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(schema = "main", name = "trip_points")
+@Table(schema = "main", name = "trippoints")
 public class TripPoint {
     @Id
     @Getter @Setter
-    private int trip_point_id;
+    private int trippoint_id;
 
     @Getter @Setter
     private String title;

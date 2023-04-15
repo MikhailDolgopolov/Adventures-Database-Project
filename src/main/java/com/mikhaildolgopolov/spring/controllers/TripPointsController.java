@@ -2,6 +2,7 @@ package com.mikhaildolgopolov.spring.controllers;
 
 import com.mikhaildolgopolov.spring.database.dao.TripPointDAO;
 import com.mikhaildolgopolov.spring.database.entities.Person;
+import com.mikhaildolgopolov.spring.database.entities.Trip;
 import com.mikhaildolgopolov.spring.database.entities.TripPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,15 @@ public class TripPointsController {
     public List<TripPoint> get(){
         return tripPointDAO.findAll();
     }
-
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public TripPoint getById(@PathVariable int id){
+        return tripPointDAO.findById(id);
+    }
+    @GetMapping(value = "/for_trip/{trip}",
+            produces = "application/json")
+    public List<TripPoint> getTripPoints(@PathVariable("trip") int trip_id){
+        return tripPointDAO.findForTripById(trip_id);
+    }
     @PostMapping(value = "/update/",
             consumes = "application/json", produces = "application/json")
     public TripPoint updatePoint(@RequestBody TripPoint point){

@@ -106,41 +106,6 @@ public class SpringConfig implements Filter,WebMvcConfigurer {
     }
 
     @Bean
-    public ViewResolver htmlViewResolver() {
-        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
-        resolver.setTemplateEngine(resolver.getTemplateEngine());
-        resolver.setContentType("text/html");
-        resolver.setCharacterEncoding("UTF-8");
-        resolver.setViewNames(new String[]{"*.html"});
-        return resolver;
-    }
-    @Bean
-    public ITemplateResolver htmlTemplateResolver() {
-        SpringResourceTemplateResolver resolver
-                = new SpringResourceTemplateResolver();
-        resolver.setApplicationContext(applicationContext);
-        resolver.setPrefix("classpath:/templates/fragments/");
-        resolver.setSuffix(".html");
-        resolver.setCacheable(false);
-        resolver.setCharacterEncoding("UTF-8");
-        resolver.setOrder(1);
-        resolver.setTemplateMode(TemplateMode.HTML);
-        resolver.setCheckExistence(true);
-        return resolver;
-    }
-    @Bean
-    public ITemplateResolver secondaryTemplateResolver() {
-        ClassLoaderTemplateResolver secondaryTemplateResolver = new ClassLoaderTemplateResolver();
-        secondaryTemplateResolver.setPrefix("classpath:/templates/");
-        secondaryTemplateResolver.setSuffix(".html");
-        secondaryTemplateResolver.setTemplateMode(TemplateMode.HTML);
-        secondaryTemplateResolver.setCharacterEncoding("UTF-8");
-        secondaryTemplateResolver.setOrder(2);
-        secondaryTemplateResolver.setCheckExistence(true);
-
-        return secondaryTemplateResolver;
-    }
-    @Bean
     public DataSource dataSource(){
         var dataSource = new DriverManagerDataSource();
         DBProperties properties = applicationContext.getBean(DBProperties.class);
@@ -148,7 +113,7 @@ public class SpringConfig implements Filter,WebMvcConfigurer {
         dataSource.setUrl(properties.getUrl());
         dataSource.setUsername(properties.getUser());
         dataSource.setPassword(properties.getPassword());
-
+        dataSource.setSchema("main");
         return dataSource;
     }
     @Bean

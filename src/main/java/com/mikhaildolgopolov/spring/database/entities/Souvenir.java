@@ -17,7 +17,7 @@ public class Souvenir {
     private String name;
 
     @Getter @Setter
-    private int trip_point_id;
+    private int trippoint_id;
 
     @Getter @Setter
     private String city;

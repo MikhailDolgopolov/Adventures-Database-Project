@@ -12,7 +12,7 @@ public class SouvenirMapper implements RowMapper<Souvenir> {
         Souvenir souvenir = new Souvenir();
         souvenir.setSouvenir_id(rs.getInt("souvenir_id"));
         souvenir.setName(rs.getString("name"));
-        souvenir.setTrip_point_id(rs.getInt("trip_point_id"));
+        souvenir.setTrippoint_id(rs.getInt("trippoint_id"));
         souvenir.setCity(rs.getString("city"));
         souvenir.setType(rs.getString("type"));
         souvenir.setMaterial(rs.getString("material"));

@@ -26,28 +26,28 @@ public class CityDAO {
                 new CityMapper(), name).stream().findAny().orElse(null);
     }
     public City save(City city){
-        String query = "INSERT INTO main.cities (city, country)" +
-                "VALUES (?,?)";
-        jdbcTemplate.update(query, city.getCity(), city.getCountry());
+        String query = "INSERT INTO main.cities (city, country, population, founded_year)" +
+                "VALUES (?,?,?,?)";
+        jdbcTemplate.update(query, city.getCity(), city.getCountry(), city.getPopulation(), city.getFounded_year());
         return findByName(city.getCity());
     }
     public List<City> findForTrip(@NotNull Trip trip){
         String query = """
                 SELECT Ct.* from main.cities as Ct
-                join main.trip_points as TP on Ct.city = TP.city
+                join main.trippoints as TP on Ct.city = TP.city
                 join main.trips as T on TP.trip_id = T.trip_id
                 WHERE T.trip_id = ?
                 UNION DISTINCT
                 SELECT Ct.* from main.cities as Ct
                 join main.souvenirs Sv on Ct.city = Sv.city
-                join main.trip_points as TP on Sv.trip_point_id = TP.trip_point_id
+                join main.trippoints as TP on Sv.trippoint_id = TP.trippoint_id
                 WHERE TP.trip_id = ?
                 UNION DISTINCT
                 SELECT Sv.* FROM main.souvenirs as Sv
                 join main.cities as Ct on Sv.city = Ct.city
                 join main.sights as Si on Ct.city = Si.city
                 join main.visited_sights as VS on Si.sight_id = VS.sight_id
-                join main.trip_points as TP on VS.trip_point_id = TP.trip_point_id
+                join main.trippoints as TP on VS.trippoint_id = TP.trippoint_id
                 join main.trips as T on TP.trip_id = T.trip_id
                 WHERE T.trip_id=?""";
         return jdbcTemplate.query(query, new CityMapper(),

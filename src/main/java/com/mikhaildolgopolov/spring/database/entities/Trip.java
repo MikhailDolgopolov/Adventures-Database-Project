@@ -8,13 +8,9 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+
+import java.sql.Date;
+
 
 @Entity
 @Table(schema = "main", name = "trips")
@@ -36,6 +32,7 @@ public class Trip implements Comparable<Trip>{
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date end_date;
+
     @Getter(AccessLevel.PUBLIC) @Setter
     private String description;
 

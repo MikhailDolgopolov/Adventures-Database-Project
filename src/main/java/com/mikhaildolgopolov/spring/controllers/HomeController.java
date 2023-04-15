@@ -21,19 +21,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/")
 public class HomeController {
-    @Autowired private PersonDAO personDAO;
-    @Autowired private CityDAO cityDAO;
-    @Autowired private CountryDAO countryDAO;
     @Autowired private TripDAO tripDAO;
     @GetMapping("/")
     public String connection(){
         return "Ok";
     }
 
-    @GetMapping(value = "/people/", produces = "application/json")
-    public List<Person> getPeople(){
-        return personDAO.findAll();
-    }
+
     @GetMapping(value = "/statistics/", produces = "application/json")
     public AdventuresStatistics getStatistics(){
         var stats = new AdventuresStatistics();

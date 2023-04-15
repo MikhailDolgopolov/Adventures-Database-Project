@@ -10,7 +10,7 @@ public class TripPointMapper implements RowMapper<TripPoint> {
     @Override
     public TripPoint mapRow(ResultSet rs, int rowNum) throws SQLException {
         var tripPoint = new TripPoint();
-        tripPoint.setTrip_point_id(rs.getInt("trip_point_id"));
+        tripPoint.setTrippoint_id(rs.getInt("trippoint_id"));
         tripPoint.setTitle(rs.getString("title"));
         tripPoint.setHotel_id(rs.getInt("hotel_id"));
         tripPoint.setTrip_id(rs.getInt("trip_id"));

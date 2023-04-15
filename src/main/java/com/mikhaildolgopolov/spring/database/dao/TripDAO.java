@@ -17,11 +17,9 @@ import java.util.List;
 
 @Component
 public class TripDAO {
-    private final JdbcTemplate jdbcTemplate;
     @Autowired
-    public TripDAO (JdbcTemplate template){
-        jdbcTemplate=template;
-    }
+    private JdbcTemplate jdbcTemplate;
+
 
     public List<Trip> findAll(){
         return jdbcTemplate.query("SELECT * FROM main.trips ORDER BY start_date DESC", new TripMapper());
@@ -56,6 +54,7 @@ public class TripDAO {
         return findById(trip.getTrip_id());
     }
     public Trip save(@NotNull Trip trip){
+        System.out.println(trip.getStart_date());
         if(trip.getTitle().equals(new Trip().getTitle()))
             return findById(-1);
         if(findByTitle(trip.getTitle())!=null) {
@@ -84,14 +83,13 @@ public class TripDAO {
 
         jdbcTemplate.update(query);
     }
-    public List<Trip> findForPerson(Person person){
-        return findForPersonById(person.getPerson_id());
-    }
     public List<Trip> findForPersonById(int personId){
         String query="SELECT T.* from main.trips as T " +
                 "join main.participation p on T.trip_id = p.trip_id " +
                 "join main.people p2 on p2.person_id = p.person_id " +
                 "WHERE p2.person_id=?";
+
+
         return jdbcTemplate.query(query, new TripMapper(), personId);
     }
 
