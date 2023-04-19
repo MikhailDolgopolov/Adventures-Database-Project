@@ -22,6 +22,9 @@ import java.util.List;
 @RequestMapping("/")
 public class HomeController {
     @Autowired private TripDAO tripDAO;
+    @Autowired private CountryDAO countryDAO;
+    @Autowired private CityDAO cityDAO;
+    @Autowired private PersonDAO personDAO;
     @GetMapping("/")
     public String connection(){
         return "Ok";
@@ -31,7 +34,10 @@ public class HomeController {
     @GetMapping(value = "/statistics/", produces = "application/json")
     public AdventuresStatistics getStatistics(){
         var stats = new AdventuresStatistics();
-        stats.trips=tripDAO.CountAll();
+        stats.numberOfTrips=tripDAO.CountAll();
+        stats.cities=cityDAO.findAll();
+        stats.countries=countryDAO.findAll();
+        stats.people=personDAO.findAll();
         return stats;
     }
 

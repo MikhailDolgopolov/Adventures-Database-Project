@@ -54,7 +54,6 @@ public class TripDAO {
         return findById(trip.getTrip_id());
     }
     public Trip save(@NotNull Trip trip){
-        System.out.println(trip.getStart_date());
         if(trip.getTitle().equals(new Trip().getTitle()))
             return findById(-1);
         if(findByTitle(trip.getTitle())!=null) {

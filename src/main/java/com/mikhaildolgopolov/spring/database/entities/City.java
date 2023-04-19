@@ -1,5 +1,6 @@
 package com.mikhaildolgopolov.spring.database.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,5 +21,10 @@ public class City {
 
     @Getter @Setter
     private int founded_year;
+
+    @JsonIgnore
+    public String toString(){
+        return city+",  "+country;
+    }
 
 }

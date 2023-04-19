@@ -10,7 +10,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/countries/")
-public class CountryController {
+public class CountriesController {
     @Autowired
     CountryDAO countryDAO;
     @GetMapping(value = "/", produces = "application/json")
@@ -20,5 +20,15 @@ public class CountryController {
     @PostMapping( value = "/create/", consumes = "application/json")
     public Country addCountry(@RequestBody Country country){
         return countryDAO.saveNew(country);
+    }
+    @PostMapping(value = "/update/{name}")
+    private Country update(@PathVariable String name, @RequestBody Country country){
+        countryDAO.rename(name, country.getCountry());
+        countryDAO.update(country);
+        return countryDAO.findByName(country.getCountry());
+    }
+    @PostMapping(value = "/delete/", consumes = "application/json")
+    private void deleteCountry(@RequestBody String name){
+        countryDAO.delete(name);
     }
 }

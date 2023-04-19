@@ -25,6 +25,14 @@ public class PersonDAO {
         return jdbcTemplate.query("SELECT * FROM main.people WHERE person_id=?",
                 new PersonMapper(), id).stream().findAny().orElse(null);
     }
+    public void update(Person p){
+        jdbcTemplate.update("UPDATE people SET first_name=?, last_name=?, patronym=?, alias=? " +
+                "WHERE person_id=?", p.getFirst_name(), p.getLast_name(), p.getLast_name(), p.getPatronym(),
+                p.getAlias(), p.getPerson_id());
+    }
+    public void delete(int person_id){
+        jdbcTemplate.update("DELETE FROM people WHERE person_id=?", person_id);
+    }
     public List<Person> findForTripById(int tripId){
         return jdbcTemplate.query("SELECT * FROM main.people " +
                 "join main.participation as P on main.people.person_id=P.person_id " +

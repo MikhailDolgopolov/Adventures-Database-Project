@@ -45,4 +45,14 @@ public class CountryDAO {
         return jdbcTemplate.query(query, new CountryMapper(),
                 person.getPerson_id(), person.getPerson_id(), person.getPerson_id());
     }
+    public void update(Country country){
+        jdbcTemplate.update("UPDATE countries SET population=?, area=?, capital_city=? WHERE country=?",
+                country.getPopulation(), country.getArea(), country.getCapital_city(), country.getCountry());
+    }
+    public void rename(String oldName, String newName){
+        jdbcTemplate.update("UPDATE countries SET country=? WHERE country=?", newName, oldName);
+    }
+    public void delete(String s){
+        jdbcTemplate.update("DELETE FROM countries WHERE country=?", s);
+    }
 }

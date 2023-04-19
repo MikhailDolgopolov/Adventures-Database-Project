@@ -47,7 +47,7 @@ public class TripsController {
         tripDAO.delete(id);
     }
 
-    @GetMapping(value = "/get/{id}", produces = "application/json")
+    @GetMapping(value = "/{id}", produces = "application/json")
     public Trip get(@PathVariable int id){
         return tripDAO.findById(id);
     }
@@ -72,15 +72,5 @@ public class TripsController {
                                      @RequestBody int person_id){
         tripDAO.deleteParticipant(trip_id, person_id);
         return personDAO.findForTripById(trip_id);
-    }
-
-
-
-    @PostMapping(value = "/{trip}/trippoints/create/",
-            produces = "application/json")
-    public List<TripPoint> addTripPoint(@PathVariable("trip") int trip_id,
-                                        @RequestBody TripPoint point){
-        point.setTrip_id(trip_id);
-        return tripPointDAO.save(point);
     }
 }

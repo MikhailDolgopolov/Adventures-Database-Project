@@ -23,6 +23,14 @@ public class SightsController {
     @GetMapping(path = "/for_trip/{trip_id}", produces = "application/json")
     private List<SightVisitCombined> getForTrip(@PathVariable int trip_id){
         List<SightVisit> visits = sightDAO.findVisitsForTrip(trip_id);
+        return getCombinedVisits(visits);
+    }
+    @GetMapping(path = "/for_trippoint/{point_id}", produces = "application/json")
+    private List<SightVisitCombined> getForTrippoint(@PathVariable int point_id){
+        List<SightVisit> visits = sightDAO.findVisitsForTripPoint(point_id);
+        return getCombinedVisits(visits);
+    }
+    private List<SightVisitCombined> getCombinedVisits(List<SightVisit> visits){
         List<SightVisitCombined> result = new ArrayList<>();
         for (SightVisit sv : visits){
             Sight s = sightDAO.findById(sv.getSight_id());
@@ -42,18 +50,15 @@ public class SightsController {
     }
     @PostMapping(value = "/visit/", consumes = "application/json")
     private void visitSight(@RequestBody SightVisitCombined sightVisit){
-        System.out.println(sightVisit.sight_id);
+
         if(sightVisit.sight_id==0) {
             sightVisit.sight_id = sightDAO.save(sightVisit.getSight());
         }
-        //System.out.println(sightVisit.getVisit());
         sightDAO.saveVisit(sightVisit.getVisit());
 
     }
     @PostMapping(value = "/update_visit/", consumes = "application/json")
     private void updateVisit(@RequestBody SightVisitCombined sightVisit){
-        System.out.println("post "+sightVisit.visited_date);
-        //System.out.println("no data saved");
         sightDAO.updateVisit(sightVisit.getVisit());
         sightDAO.update(sightVisit.getSight());
     }

@@ -30,9 +30,15 @@ public class TripPointsController {
     public List<TripPoint> getTripPoints(@PathVariable("trip") int trip_id){
         return tripPointDAO.findForTripById(trip_id);
     }
+    @PostMapping(value = "/create/", consumes = "application/json")
+    public void create(@RequestBody TripPoint tp){
+        if(tp.getCity()!=null && tp.getCity().length()==0) tp.setCity(null);
+        tripPointDAO.save(tp);
+    }
     @PostMapping(value = "/update/",
             consumes = "application/json", produces = "application/json")
     public TripPoint updatePoint(@RequestBody TripPoint point){
+        if(point.getCity()!=null && point.getCity().length()==0) point.setCity(null);
         return tripPointDAO.update(point);
     }
 

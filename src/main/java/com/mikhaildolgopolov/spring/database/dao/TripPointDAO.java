@@ -37,7 +37,7 @@ public class TripPointDAO {
         TripPoint point = findById(id);
         int trip_id  =  point.getTrip_id();
         jdbcTemplate.update("DELETE FROM main.trippoints WHERE trippoint_id=?", id);
-        String decreaseOrder="UPDATE main.trippoints SET trip_order=trip_order-1 WHERE trip_id=? AND trip_order>=?";
+        String decreaseOrder="UPDATE main.trippoints SET trip_order=trip_order-1 WHERE trip_id=? AND trip_order>?";
         jdbcTemplate.update(decreaseOrder,trip_id, point.getTrip_order());
 
     }
@@ -60,7 +60,7 @@ public class TripPointDAO {
         jdbcTemplate.update(query, point.getTitle(), point.getCity(), point.getTrippoint_id());
         return findById(point.getTrippoint_id());
     }
-    public List<TripPoint> swap(int point_id, int direction){
+    public void swap(int point_id, int direction){
         TripPoint first,second;
         if(direction>0){
             first = findById(point_id);
@@ -76,6 +76,5 @@ public class TripPointDAO {
             jdbcTemplate.update("UPDATE main.trippoints SET trip_order=trip_order-1 WHERE trippoint_id=?", first.getTrippoint_id());
             jdbcTemplate.update("UPDATE main.trippoints SET trip_order=trip_order+1 WHERE trippoint_id=?", second.getTrippoint_id());
         }
-        return findForTripById(findById(point_id).getTrip_id());
     }
 }

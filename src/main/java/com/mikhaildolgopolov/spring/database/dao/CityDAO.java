@@ -31,6 +31,14 @@ public class CityDAO {
         jdbcTemplate.update(query, city.getCity(), city.getCountry(), city.getPopulation(), city.getFounded_year());
         return findByName(city.getCity());
     }
+
+    public void update(City city){
+        jdbcTemplate.update("UPDATE cities SET country=?, population=?, founded_year=? WHERE city=?",
+                city.getCountry(), city.getPopulation(), city.getFounded_year(), city.getCity());
+    }
+    public void rename(String oldName, String newName){
+        jdbcTemplate.update("UPDATE cities SET city=? WHERE city=?", newName, oldName);
+    }
     public List<City> findForTrip(@NotNull Trip trip){
         String query = """
                 SELECT Ct.* from main.cities as Ct
@@ -52,5 +60,9 @@ public class CityDAO {
                 WHERE T.trip_id=?""";
         return jdbcTemplate.query(query, new CityMapper(),
                 trip.getTrip_id(), trip.getTrip_id(), trip.getTrip_id());
+    }
+
+    public void delete(String name){
+        jdbcTemplate.update("DELETE FROM cities WHERE city=?", name);
     }
 }

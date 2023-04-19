@@ -60,7 +60,6 @@ public class SightDAO {
                 "(?, ?, ?)", v.getTrippoint_id(), v.getSight_id(), v.getVisited_date());
     }
     public void updateVisit(SightVisit v){
-        System.out.println(v.getVisited_date()+"  "+ v.getSight_id() +"  "+ v.getTrippoint_id());
         jdbcTemplate.update("UPDATE visited_sights SET visited_date=? WHERE sight_id=? AND visited_sights.trippoint_id=?", v.getVisited_date(), v.getSight_id(), v.getTrippoint_id());
     }
     public void deleteVisit(int sight_id, int point_id){
@@ -81,12 +80,10 @@ public class SightDAO {
                 "WHERE t2.trip_id=?";
         return jdbcTemplate.query(query, new SightVisitMapper(), trip_id);
     }
-    public List<Sight> findForTripPoint(int trippoint_id){
-        String query = "SELECT Si.* from main.sights as Si " +
-                "join main.visited_sights as VS on Si.sight_id = VS.sight_id " +
-                "join main.trippoints as TP on VS.trippoint_id = TP.trippoint_id " +
-                "WHERE TP.trippoint_id = ?";
-        return jdbcTemplate.query(query, new SightMapper(), trippoint_id);
+    public List<SightVisit> findVisitsForTripPoint(int trippoint_id){
+        String query = "SELECT v.* FROM visited_sights as v " +
+                "WHERE v.trippoint_id = ?";
+        return jdbcTemplate.query(query, new SightVisitMapper(), trippoint_id);
     }
     public List<String> getTypes(){
         return jdbcTemplate.queryForList("SELECT DISTINCT type FROM sights WHERE type is not null", String.class);
