@@ -1,9 +1,7 @@
 package com.mikhaildolgopolov.spring.database.dao;
 
 import com.mikhaildolgopolov.spring.database.entities.Person;
-import com.mikhaildolgopolov.spring.database.entities.Trip;
 import com.mikhaildolgopolov.spring.database.entities.mappers.PersonMapper;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -25,9 +23,13 @@ public class PersonDAO {
         return jdbcTemplate.query("SELECT * FROM main.people WHERE person_id=?",
                 new PersonMapper(), id).stream().findAny().orElse(null);
     }
+    public void save(Person p){
+        jdbcTemplate.update("INSERT INTO people (first_name, last_name, patronym, alias)" +
+                " VALUES (?, ?, ?, ?)", p.getFirst_name(), p.getLast_name(), p.getPatronym(), p.getAlias());
+    }
     public void update(Person p){
-        jdbcTemplate.update("UPDATE people SET first_name=?, last_name=?, patronym=?, alias=? " +
-                "WHERE person_id=?", p.getFirst_name(), p.getLast_name(), p.getLast_name(), p.getPatronym(),
+        jdbcTemplate.update("UPDATE main.people SET first_name=?, last_name=?, patronym=?, alias=?" +
+                " WHERE person_id=?", p.getFirst_name(), p.getLast_name(), p.getPatronym(),
                 p.getAlias(), p.getPerson_id());
     }
     public void delete(int person_id){
