@@ -6,6 +6,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Optional;
+
 @Entity
 @Table(schema = "main", name = "sights")
 public class Sight {
@@ -13,11 +15,21 @@ public class Sight {
     @Getter @Setter
     private int sight_id;
 
-    @Getter @Setter
+    @Getter
     private String name;
 
-    @Getter @Setter
+    public void setName(String value){
+        name=value.trim();
+    }
+
+    @Getter
     private String city;
+
+    public void setCity(String value){
+        city = Optional.ofNullable(value)
+                .map(String::trim)
+                .orElse(null);
+    }
 
     @Getter @Setter
     private String type;
