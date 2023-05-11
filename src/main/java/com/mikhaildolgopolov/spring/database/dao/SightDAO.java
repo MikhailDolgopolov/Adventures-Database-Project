@@ -3,15 +3,13 @@ package com.mikhaildolgopolov.spring.database.dao;
 import com.mikhaildolgopolov.spring.database.entities.Sight;
 import com.mikhaildolgopolov.spring.database.entities.SightVisit;
 import com.mikhaildolgopolov.spring.database.entities.Trip;
-import com.mikhaildolgopolov.spring.database.entities.TripPoint;
 import com.mikhaildolgopolov.spring.database.entities.mappers.SightMapper;
 import com.mikhaildolgopolov.spring.database.entities.mappers.SightVisitMapper;
-import org.jetbrains.annotations.NotNull;
+import com.mikhaildolgopolov.spring.database.entities.mappers.TripMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
 import java.util.List;
 
 @Component
@@ -36,7 +34,7 @@ public class SightDAO {
     public int save(Sight newSight){
 
         jdbcTemplate.update("INSERT INTO main.sights (name, city, type, created_year, description) " +
-                "VALUES (?, ?)", newSight.getName(), newSight.getCity(), newSight.getType(), newSight.getCreated_year(), newSight.getDescription());
+                "VALUES (?, ?, ?, ?, ?)", newSight.getName(), newSight.getCity(), newSight.getType(), newSight.getCreated_year(), newSight.getDescription());
 
         return findByName(newSight.getName()).getSight_id();
     }
@@ -87,6 +85,30 @@ public class SightDAO {
     }
     public List<String> getTypes(){
         return jdbcTemplate.queryForList("SELECT DISTINCT type FROM sights WHERE type is not null", String.class);
+    }
+    public List<Sight> findForCity(String city){
+        String query="SELECT sights.* from main.sights WHERE city=?";
+        return jdbcTemplate.query(query,new SightMapper(), city);
+    }
+    public List<Trip> findTripsForSight(int id){
+        return jdbcTemplate.query("SELECT DISTINCT trips.* FROM trips " +
+                "JOIN trippoints t on trips.trip_id = t.trip_id " +
+                "JOIN visited_sights vs on t.trippoint_id = vs.trippoint_id " +
+                "WHERE vs.sight_id=?", new TripMapper(), id);
+    }
+    public List<Sight> findForCountry(String country){
+        String query="SELECT sights.* from main.sights " +
+                "join cities c on c.city = sights.city " +
+                " WHERE c.country=?";
+        return jdbcTemplate.query(query,new SightMapper(), country);
+    }
+
+    public List<Sight> findSimilarById(int s_id){
+        Sight current = findById(s_id);
+        String query="SELECT s.* FROM sights s " +
+                "WHERE (s.city=? OR s.type=?) and s.sight_id!="+s_id;
+        return jdbcTemplate.query(query, new SightMapper(),current.getCity(),current.getType());
+
     }
 
 }
