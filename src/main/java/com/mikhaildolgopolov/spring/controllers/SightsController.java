@@ -7,6 +7,7 @@ import com.mikhaildolgopolov.spring.helpers.SightVisitCombined;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,14 @@ public class SightsController {
     private List<SightVisitCombined> getForTrippoint(@PathVariable int point_id){
         List<SightVisit> visits = sightDAO.findVisitsForTripPoint(point_id);
         return getCombinedVisits(visits);
+    }
+    @GetMapping(path = "/for_city/{city}", produces = "application/json")
+    public List<Sight> getForCity(@PathVariable String city){
+        return sightDAO.findForCity(city);
+    }
+    @GetMapping(path = "/for_country/{country}", produces = "application/json")
+    public List<Sight> getForCountry(@PathVariable String country){
+        return sightDAO.findForCountry(country);
     }
     private List<SightVisitCombined> getCombinedVisits(List<SightVisit> visits){
         List<SightVisitCombined> result = new ArrayList<>();
@@ -62,6 +71,10 @@ public class SightsController {
         sightDAO.updateVisit(sightVisit.getVisit());
         sightDAO.update(sightVisit.getSight());
     }
+    @PostMapping(value = "update_visit_date/", consumes = "application/json")
+    private void updateVisitDate(@RequestBody SightVisitCombined sightVisit){
+        sightDAO.updateVisit(sightVisit.getVisit());
+    }
     @PostMapping(value = "/delete/", consumes = "application/json")
     private void deleteSight(@RequestBody Sight sight){
         sightDAO.delete(sight);
@@ -74,5 +87,10 @@ public class SightsController {
     @GetMapping(value = "/types/", produces = "application/json")
     private List<String> getTypes(){
         return sightDAO.getTypes();
+    }
+
+    @GetMapping(value = "/similar_to/{id}", produces = "application/json")
+    private List<Sight> getSimilar(@PathVariable int id){
+        return sightDAO.findSimilarById(id);
     }
 }
