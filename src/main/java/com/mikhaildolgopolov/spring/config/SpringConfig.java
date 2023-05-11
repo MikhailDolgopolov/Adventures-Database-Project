@@ -1,6 +1,11 @@
 package com.mikhaildolgopolov.spring.config;
 
+import com.jlefebure.spring.boot.minio.MinioConfigurationProperties;
+import com.jlefebure.spring.boot.minio.MinioService;
 import com.mikhaildolgopolov.spring.database.DBProperties;
+import io.minio.MinioClient;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletRequest;
@@ -40,9 +45,9 @@ public class SpringConfig implements Filter,WebMvcConfigurer {
             "/css/**",
             "/js/**",
             "/webjars/**",
-            "/static/**","/static/img/",
+            "/static/**", "/static/img/",
             "/resources/**",
-            "/**", "/trips/**","/trips/add/",
+            "/**", "/trips/**", "/trips/add/",
             "/trip/**", "/templates/fragments/"
     };
     private static final String[] RESOURCE_LOCATIONS = {
@@ -53,7 +58,9 @@ public class SpringConfig implements Filter,WebMvcConfigurer {
     private final ApplicationContext applicationContext;
 
     @Autowired
-    public SpringConfig(ApplicationContext context){applicationContext=context;}
+    public SpringConfig(ApplicationContext context) {
+        applicationContext = context;
+    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -77,20 +84,21 @@ public class SpringConfig implements Filter,WebMvcConfigurer {
         if (!(request.getMethod().equalsIgnoreCase("OPTIONS"))) {
             try {
                 chain.doFilter(req, res);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Access-Control-Allow-Methods", "POST,GET,DELETE,PUT");
             response.setHeader("Access-Control-Max-Age", "3600");
-            response.setHeader("Access-Control-Allow-Headers", "Access-Control-Expose-Headers"+"Authorization, content-type," +
-                    "USERID"+"ROLE"+
+            response.setHeader("Access-Control-Allow-Headers", "Access-Control-Expose-Headers" + "Authorization, content-type," +
+                    "USERID" + "ROLE" +
                     "access-control-request-headers,access-control-request-method,accept,origin,authorization,x-requested-with,responseType,observe");
             response.setStatus(HttpServletResponse.SC_OK);
         }
 
     }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         if (!registry.hasMappingForPattern("/**")) {
@@ -100,7 +108,7 @@ public class SpringConfig implements Filter,WebMvcConfigurer {
     }
 
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         var dataSource = new DriverManagerDataSource();
         DBProperties properties = applicationContext.getBean(DBProperties.class);
         dataSource.setDriverClassName(properties.getDriver());
@@ -110,8 +118,9 @@ public class SpringConfig implements Filter,WebMvcConfigurer {
         dataSource.setSchema("main");
         return dataSource;
     }
+
     @Bean
-    public JdbcTemplate jdbcTemplate(){
+    public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
     }
 
@@ -125,10 +134,12 @@ public class SpringConfig implements Filter,WebMvcConfigurer {
 
         return new InMemoryUserDetailsManager(user);
     }
+
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -145,4 +156,17 @@ public class SpringConfig implements Filter,WebMvcConfigurer {
             throw new UnsupportedOperationException();
         };
     }
+    @Bean
+    public MinioService minioService(){
+        return new MinioService();
+    }
+    @Bean
+    public MinioClient minioClient() throws InvalidPortException, InvalidEndpointException {
+        return new MinioClient("https://play.min.io", "Q3AM3UQ867SPQQA43P2F", "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG");
+    }
+    @Bean
+    public MinioConfigurationProperties minioConfigurationProperties(){
+        return new MinioConfigurationProperties();
+    }
 }
+
