@@ -8,7 +8,6 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;

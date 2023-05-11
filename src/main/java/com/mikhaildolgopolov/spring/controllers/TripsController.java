@@ -1,11 +1,10 @@
 package com.mikhaildolgopolov.spring.controllers;
 
 import com.mikhaildolgopolov.spring.database.dao.PersonDAO;
+import com.mikhaildolgopolov.spring.database.dao.SightDAO;
 import com.mikhaildolgopolov.spring.database.dao.TripDAO;
-import com.mikhaildolgopolov.spring.database.dao.TripPointDAO;
 import com.mikhaildolgopolov.spring.database.entities.Person;
 import com.mikhaildolgopolov.spring.database.entities.Trip;
-import com.mikhaildolgopolov.spring.database.entities.TripPoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,7 +18,7 @@ import java.util.List;
 @RequestMapping("/trips/")
 public class TripsController {
     @Autowired private TripDAO tripDAO;
-    @Autowired private TripPointDAO tripPointDAO;
+    @Autowired private SightDAO sightDAO;
     @Autowired private PersonDAO personDAO;
     @GetMapping(path = "/years/{year}", produces = "application/json")
     public List<Trip> getTrips(@PathVariable int year){
@@ -28,13 +27,31 @@ public class TripsController {
 
     @GetMapping(path = "/years/", produces = "application/json")
     public List<Integer> getYears(){
-
         return tripDAO.findTripYears();
     }
 
     @GetMapping(path = "/", produces = "application/json")
     public List<Trip> justTrips(){
         return tripDAO.findAll();
+    }
+
+    @GetMapping(path = "/for_country/{country}", produces = "application/json")
+    public List<Trip> getTripsForCountry(@PathVariable String country){
+        return tripDAO.findForCountry(country);
+    }
+
+    @GetMapping(path = "/for_person/{id}", produces = "application/json")
+    public List<Trip> getTripsForPerson(@PathVariable int id){
+        return tripDAO.findForPersonById(id);
+    }
+    @GetMapping(path = "/not_mine/{id}", produces = "application/json")
+    public List<Trip> getOtherTrips(@PathVariable int id){
+        return tripDAO.findFreeForPerson(id);
+    }
+
+    @GetMapping(path = "/for_sight/{sight_id}", produces = "application/json")
+    private List<Trip> getTripsConnectedToSight(@PathVariable int sight_id){
+        return sightDAO.findTripsForSight(sight_id);
     }
     @PostMapping(value = "/create/",
             consumes = "application/json", produces = "application/json")

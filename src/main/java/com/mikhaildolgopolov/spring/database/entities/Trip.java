@@ -16,21 +16,23 @@ import java.sql.Date;
 @Table(schema = "main", name = "trips")
 public class Trip implements Comparable<Trip>{
     @Id
-    @Getter(AccessLevel.PUBLIC) @Setter
+    @Getter @Setter
     private int trip_id;
 
-    @Getter(AccessLevel.PUBLIC) @Setter
+    @Getter
     private String title;
+    public void setTitle(String value){
+        title=value.trim();
+    }
 
-
-    @Getter(AccessLevel.PUBLIC) @Setter
+    @Getter @Setter
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="Europe/Moscow")
     private Date start_date;
 
     @Getter @Setter
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="Europe/Moscow")
     private Date end_date;
 
     @Getter(AccessLevel.PUBLIC) @Setter

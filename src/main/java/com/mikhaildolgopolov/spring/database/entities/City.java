@@ -5,13 +5,20 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Optional;
+
 
 @Entity
 @Table(schema = "main", name = "Cities")
 public class City {
     @Id
-    @Getter @Setter
+    @Getter
     private String city;
+    public void setCity(String value){
+        city = Optional.ofNullable(value)
+                .map(String::trim)
+                .orElse(null);
+    }
 
     @Getter @Setter
     private String country;

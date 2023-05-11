@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -46,13 +45,13 @@ public class TripPointDAO {
         return jdbcTemplate.query(query, new TripPointMapper(), trip_id);
     }
 
-    public List<TripPoint> save(TripPoint newPoint){
+    public void save(TripPoint newPoint){
         String query = "INSERT INTO main.trippoints " +
                 "(title, trip_id, city, trip_order)" +
                 "VALUES (?, ?, ?, ?)";
         jdbcTemplate.update(query, newPoint.getTitle(), newPoint.getTrip_id(),
                 newPoint.getCity(), newPoint.getTrip_order());
-        return findForTripById(newPoint.getTrip_id());
+        findForTripById(newPoint.getTrip_id());
     }
 
     public TripPoint update(TripPoint point){
@@ -67,6 +66,7 @@ public class TripPointDAO {
             second = jdbcTemplate.query("SELECT * FROM main.trippoints WHERE trip_id=? AND trip_order=?",
                     new TripPointMapper(), first.getTrip_id(), first.getTrip_order()+1).stream().findAny().orElse(null);
             jdbcTemplate.update("UPDATE main.trippoints SET trip_order=trip_order+1 WHERE trippoint_id=?", first.getTrippoint_id());
+            assert second != null;
             jdbcTemplate.update("UPDATE main.trippoints SET trip_order=trip_order-1 WHERE trippoint_id=?", second.getTrippoint_id());
         }
         else{
@@ -74,6 +74,7 @@ public class TripPointDAO {
             second = jdbcTemplate.query("SELECT * FROM main.trippoints WHERE trip_id=? AND trip_order=?",
                     new TripPointMapper(), first.getTrip_id(), first.getTrip_order()-1).stream().findAny().orElse(null);
             jdbcTemplate.update("UPDATE main.trippoints SET trip_order=trip_order-1 WHERE trippoint_id=?", first.getTrippoint_id());
+            assert second != null;
             jdbcTemplate.update("UPDATE main.trippoints SET trip_order=trip_order+1 WHERE trippoint_id=?", second.getTrippoint_id());
         }
     }

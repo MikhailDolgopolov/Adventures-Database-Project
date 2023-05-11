@@ -6,6 +6,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Optional;
+
 @Entity
 @Table(schema = "main", name = "trippoints")
 public class TripPoint {
@@ -13,8 +15,11 @@ public class TripPoint {
     @Getter @Setter
     private int trippoint_id;
 
-    @Getter @Setter
+    @Getter
     private String title;
+    public void setTitle(String value){
+        title=value.trim();
+    }
 
     @Getter @Setter
     private int hotel_id;
@@ -22,8 +27,13 @@ public class TripPoint {
     @Getter @Setter
     private int trip_id;
 
-    @Getter @Setter
+    @Getter
     private String city;
+    public void setCity(String value){
+        city = Optional.ofNullable(value)
+                .map(String::trim)
+                .orElse(null);
+    }
 
     @Getter @Setter
     private int trip_order;

@@ -2,17 +2,13 @@ package com.mikhaildolgopolov.spring.database.dao;
 
 import com.mikhaildolgopolov.spring.database.entities.*;
 import com.mikhaildolgopolov.spring.database.entities.mappers.TripMapper;
-import com.mikhaildolgopolov.spring.database.entities.mappers.YearMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -23,9 +19,6 @@ public class TripDAO {
 
     public List<Trip> findAll(){
         return jdbcTemplate.query("SELECT * FROM main.trips ORDER BY start_date DESC", new TripMapper());
-    }
-    public int CountAll(){
-        return jdbcTemplate.queryForObject("SELECT COUNT(trip_id) as trip_count from main.trips", Integer.class);
     }
 
     public Trip findById(int id){
@@ -38,11 +31,20 @@ public class TripDAO {
     }
 
     public List<Trip> findByYear(int year){
-        return jdbcTemplate.query("SELECT * FROM main.trips WHERE year=?",
+        return jdbcTemplate.query("SELECT * FROM main.trips WHERE year=? ORDER BY start_date DESC",
                 new TripMapper(), year);
     }
     public List<Integer> findTripYears() {
-        return jdbcTemplate.query("SELECT DISTINCT year FROM main.trips ORDER BY year DESC ", new YearMapper());
+        return jdbcTemplate.queryForList("SELECT DISTINCT year FROM main.trips ORDER BY year DESC ", Integer.class);
+    }
+    public List<Trip> findForCountry(String name){
+        String query = "SELECT DISTINCT trips.* FROM trips " +
+                "JOIN trippoints t on trips.trip_id = t.trip_id " +
+                "JOIN cities c on t.city = c.city " +
+                "JOIN countries c2 on c2.country = c.country " +
+                "WHERE c2.country=? " +
+                "ORDER BY start_date DESC ";
+        return jdbcTemplate.query(query, new TripMapper(), name);
     }
     public Trip update(@NotNull Trip trip){
         jdbcTemplate.update(
@@ -86,9 +88,17 @@ public class TripDAO {
         String query="SELECT T.* from main.trips as T " +
                 "join main.participation p on T.trip_id = p.trip_id " +
                 "join main.people p2 on p2.person_id = p.person_id " +
-                "WHERE p2.person_id=?";
-
-
+                "WHERE p2.person_id=? " +
+                "ORDER BY T.start_date DESC ";
+        return jdbcTemplate.query(query, new TripMapper(), personId);
+    }
+    public List<Trip> findFreeForPerson(int personId){
+        String query="SELECT DISTINCT * from (SELECT * FROM main.trips EXCEPT" +
+                "(SELECT T.* from main.trips as T " +
+                "join main.participation p on T.trip_id = p.trip_id " +
+                "join main.people p2 on p2.person_id = p.person_id " +
+                "WHERE p2.person_id=? )) as otherTrips "+
+                "ORDER BY start_date DESC";
         return jdbcTemplate.query(query, new TripMapper(), personId);
     }
 

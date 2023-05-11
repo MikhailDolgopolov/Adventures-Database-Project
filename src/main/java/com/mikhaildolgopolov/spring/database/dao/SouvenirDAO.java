@@ -1,15 +1,20 @@
 package com.mikhaildolgopolov.spring.database.dao;
 
+import com.mikhaildolgopolov.spring.database.entities.City;
+import com.mikhaildolgopolov.spring.database.entities.Country;
 import com.mikhaildolgopolov.spring.database.entities.Souvenir;
-import com.mikhaildolgopolov.spring.database.entities.Trip;
+import com.mikhaildolgopolov.spring.database.entities.TripPoint;
+import com.mikhaildolgopolov.spring.database.entities.mappers.CityMapper;
+import com.mikhaildolgopolov.spring.database.entities.mappers.CountryMapper;
 import com.mikhaildolgopolov.spring.database.entities.mappers.SouvenirMapper;
-import org.jetbrains.annotations.NotNull;
+import com.mikhaildolgopolov.spring.database.entities.mappers.TripPointMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class SouvenirDAO {
@@ -52,20 +57,91 @@ public class SouvenirDAO {
     public List<Souvenir> findForTrippoint(int point_id){
         return jdbcTemplate.query("SELECT * FROM main.souvenirs WHERE trippoint_id=?", new SouvenirMapper(), point_id);
     }
+    public Country findCountry(int souvenir_id){
+        String query="SELECT c.* FROM countries c JOIN cities c2 on c.country = c2.country " +
+                "JOIN souvenirs s on c2.city = s.city " +
+                "WHERE s.souvenir_id=?" +
+                "UNION " +
+                "SELECT c.* FROM countries c JOIN cities c2 on c.country = c2.country " +
+                "JOIN trippoints t on c2.city = t.city " +
+                "JOIN souvenirs s2 on t.trippoint_id = s2.trippoint_id " +
+                "WHERE s2.souvenir_id=?";
+        return jdbcTemplate.query(query, new CountryMapper(), souvenir_id, souvenir_id).stream().findAny().orElse(null);
+    }
+    public City findCity(int souvenir_id){
+        String query="SELECT c.* FROM cities c " +
+                "JOIN souvenirs s on c.city = s.city " +
+                "WHERE s.souvenir_id=?" +
+                "UNION " +
+                "SELECT c.* FROM cities c " +
+                "JOIN trippoints t on c.city = t.city " +
+                "JOIN souvenirs s2 on t.trippoint_id = s2.trippoint_id " +
+                "WHERE s2.souvenir_id=?";
+        return jdbcTemplate.query(query, new CityMapper(), souvenir_id, souvenir_id).stream().findAny().orElse(null);
+    }
+    public TripPoint findTrippointById(int souv_id){
+        return jdbcTemplate.query("SELECT Tp.* FROM trippoints Tp " +
+                "JOIN souvenirs s on Tp.trippoint_id = s.trippoint_id " +
+                "WHERE souvenir_id="+souv_id, new TripPointMapper()).stream().findAny().orElse(null);
+    }
+    public List<TripPoint> findTrippointsForSouvenirTrip(int souv_id){
+        return jdbcTemplate.query("SELECT Tp.* FROM trippoints Tp " +
+                "JOIN trips t on t.trip_id = Tp.trip_id " +
+                "WHERE t.trip_id IN (SELECT t.trip_id FROM trips t " +
+                "JOIN trippoints t2 on t.trip_id = t2.trip_id " +
+                "JOIN souvenirs s on t2.trippoint_id = s.trippoint_id " +
+                "WHERE souvenir_id=?)", new TripPointMapper(),souv_id);
+    }
+    public List<Souvenir> findSimilarById(int s_id){
+        Country c = findCountry(s_id);
+        if(c==null) return new ArrayList<>();
+        Souvenir current=findById(s_id);
+        if(current==null) return new ArrayList<>();
+        return jdbcTemplate.query("SELECT Sv.* FROM souvenirs Sv " +
+                        "join trippoints t on t.trippoint_id = Sv.trippoint_id " +
+                        "join cities c on c.city = t.city " +
+                        "WHERE c.country=? or type=? and material=?" +
+                        "UNION DISTINCT " +
+                        "SELECT Sv.* FROM souvenirs Sv " +
+                        "join cities c on c.city = Sv.city " +
+                        "WHERE c.country=? or type=? and material=?",
+                new SouvenirMapper(),
+                c.getCountry(),  current.getType(), current.getMaterial(),
+                c.getCountry(), current.getType(), current.getMaterial());
+    }
 
-    public void save(Souvenir souvenir){
-        if(cityDAO.findByName(souvenir.getName())==null)
+    public List<Souvenir> findForCountry(String country){
+        String query = "SELECT Sv.* FROM souvenirs Sv " +
+                "join trippoints t on t.trippoint_id = Sv.trippoint_id " +
+                "join cities c on c.city = t.city " +
+                "WHERE c.country=?" +
+                "UNION " +
+                "SELECT Sv.* FROM souvenirs Sv " +
+                "join cities c on c.city = Sv.city " +
+                "WHERE c.country=?";
+        return jdbcTemplate.query(query, new SouvenirMapper(), country,country);
+    }
+
+    public List<Souvenir> findForCity(String city){
+        String query = "SELECT Sv.* FROM souvenirs Sv " +
+                "join trippoints t on t.trippoint_id = Sv.trippoint_id " +
+                "WHERE Sv.city = ? or t.city=?";
+        return jdbcTemplate.query(query, new SouvenirMapper(), city, city);
+    }
+
+    public void save(Souvenir s){
+        if(cityDAO.findByName(s.getName())==null)
             jdbcTemplate.update("INSERT INTO main.souvenirs " +
-                "(name, trippoint_id, type, material, description) " +
-                "VALUES (?, ?, ?, ?, ?)",
-                souvenir.getName(), souvenir.getTrippoint_id(), souvenir.getType(),
-               souvenir.getMaterial(), souvenir.getDescription());
+                "(name, trippoint_id, type, material, description, city) " +
+                "VALUES (?, ?, ?, ?, ?,?)",
+                s.getName(), s.getTrippoint_id(), s.getType(),
+               s.getMaterial(), s.getDescription(), s.getCity());
         else{
             jdbcTemplate.update("INSERT INTO main.souvenirs " +
                             "(name, trippoint_id, city, type, material, description) " +
                             "VALUES (?, ?, ?, ?, ?, ?)",
-                    souvenir.getName(), souvenir.getTrippoint_id(), souvenir.getCity(), souvenir.getType(),
-                    souvenir.getMaterial(), souvenir.getDescription());
+                    s.getName(), s.getTrippoint_id(), s.getCity(), s.getType(),
+                    s.getMaterial(), s.getDescription());
         }
     }
 

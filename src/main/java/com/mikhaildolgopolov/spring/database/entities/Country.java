@@ -6,12 +6,17 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Optional;
+
 @Entity
 @Table(schema = "main", name = "countries")
 public class Country {
     @Id
-    @Getter @Setter
+    @Getter
     private String country;
+    public void setCountry(String value){
+        country=value.trim();
+    }
 
     @Getter @Setter
     private int population;
@@ -19,6 +24,11 @@ public class Country {
     @Getter @Setter
     private int area;
 
-    @Getter @Setter
+    @Getter
     private String capital_city;
+    public void setCapital_city(String value){
+        capital_city = Optional.ofNullable(value)
+                .map(String::trim)
+                .orElse(null);
+    }
 }

@@ -13,15 +13,29 @@ import java.util.List;
 public class SouvenirsController {
     @Autowired
     private SouvenirDAO souvenirDAO;
+
+    @GetMapping(produces = "application/json")
+    public List<Souvenir> getAll(){
+        return souvenirDAO.findAll();
+    }
     @GetMapping(path = "/for_trip/{trip_id}", produces = "application/json")
     private List<Souvenir> getForTrip(@PathVariable int trip_id){
         return souvenirDAO.findForTrip(trip_id);
     }
+    @GetMapping(path = "/for_country/{country}", produces = "application/json")
+    private List<Souvenir> getForCountry(@PathVariable String country){
+        return souvenirDAO.findForCountry(country);
+    }
+
+
+    @GetMapping(path = "/for_city/{city}", produces = "application/json")
+    private List<Souvenir> getForCity(@PathVariable String city){
+        return souvenirDAO.findForCity(city);
+    }
+
     @GetMapping(path = "/for_trippoint/{point_id}", produces = "application/json")
     private List<Souvenir> getForTrippoint(@PathVariable int point_id){
-        List<Souvenir> found=souvenirDAO.findForTrippoint(point_id);
-
-        return found;
+        return souvenirDAO.findForTrippoint(point_id);
     }
 
     @PostMapping(path = "/create/", consumes = "application/json")
@@ -45,5 +59,10 @@ public class SouvenirsController {
     @PostMapping(value = "/delete/", consumes = "application/json")
     private void delete(@RequestBody Souvenir souvenir){
         souvenirDAO.delete(souvenir);
+    }
+
+    @GetMapping(value = "/similar_to/{id}", produces = "application/json")
+    private List<Souvenir> getSimilar(@PathVariable int id){
+        return souvenirDAO.findSimilarById(id);
     }
 }

@@ -18,6 +18,10 @@ public class PeopleController {
         return personDAO.findAll();
     }
 
+    @PostMapping(value = "/create/", consumes = "application/json")
+    private void createPerson(@RequestBody Person person){
+        personDAO.save(person);
+    }
     @PostMapping(value = "/update/", consumes = "application/json")
     public void updatePerson(@RequestBody Person p){
         personDAO.update(p);

@@ -1,12 +1,9 @@
 package com.mikhaildolgopolov.spring.controllers;
 
+import com.mikhaildolgopolov.spring.database.dao.SouvenirDAO;
 import com.mikhaildolgopolov.spring.database.dao.TripPointDAO;
-import com.mikhaildolgopolov.spring.database.entities.Person;
-import com.mikhaildolgopolov.spring.database.entities.Trip;
 import com.mikhaildolgopolov.spring.database.entities.TripPoint;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +14,8 @@ import java.util.List;
 public class TripPointsController {
     @Autowired
     TripPointDAO tripPointDAO;
+    @Autowired
+    SouvenirDAO souvenirDAO;
     @GetMapping(value = "/", produces = "application/json")
     public List<TripPoint> get(){
         return tripPointDAO.findAll();
@@ -30,6 +29,18 @@ public class TripPointsController {
     public List<TripPoint> getTripPoints(@PathVariable("trip") int trip_id){
         return tripPointDAO.findForTripById(trip_id);
     }
+    @GetMapping(value = "/for_souvenir/{id}",
+            produces = "application/json")
+    public TripPoint getSouvenirTrippoint(@PathVariable int id){
+        return souvenirDAO.findTrippointById(id);
+    }
+     @GetMapping(value = "/related_to_souvenir/{id}",
+            produces = "application/json")
+    public List<TripPoint> getSouvenirRelatedTrippoints(@PathVariable int id){
+        return souvenirDAO.findTrippointsForSouvenirTrip(id);
+    }
+
+
     @PostMapping(value = "/create/", consumes = "application/json")
     public void create(@RequestBody TripPoint tp){
         if(tp.getCity()!=null && tp.getCity().length()==0) tp.setCity(null);
