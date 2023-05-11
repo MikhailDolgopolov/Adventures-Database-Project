@@ -22,9 +22,6 @@ public class TripPoint {
     }
 
     @Getter @Setter
-    private int hotel_id;
-
-    @Getter @Setter
     private int trip_id;
 
     @Getter

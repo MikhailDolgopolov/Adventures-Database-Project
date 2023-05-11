@@ -12,7 +12,6 @@ public class TripPointMapper implements RowMapper<TripPoint> {
         var tripPoint = new TripPoint();
         tripPoint.setTrippoint_id(rs.getInt("trippoint_id"));
         tripPoint.setTitle(rs.getString("title"));
-        tripPoint.setHotel_id(rs.getInt("hotel_id"));
         tripPoint.setTrip_id(rs.getInt("trip_id"));
         tripPoint.setCity(rs.getString("city"));
         tripPoint.setTrip_order(rs.getInt("trip_order"));
